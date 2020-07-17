@@ -1,5 +1,6 @@
 import React from 'react';
-import styled from 'styled-components'
+import styled from 'styled-components';
+import SingleTaskMode from './SingleTaskMode'
 
 const WrapperTodo = styled.div`
 
@@ -43,7 +44,7 @@ const AddTodo = styled.button``;
 
 const ListMode = styled.button``;
 
-const SingleTaskMode = styled.button``;
+const SingleTaskModeButton = styled.button``;
 
 function App() {
   return (
@@ -72,8 +73,11 @@ function App() {
       </WrapperAddTodo>
       <WrapperControls>
         <ListMode>Список</ListMode>
-        <SingleTaskMode>Одно задание</SingleTaskMode>
+        <SingleTaskModeButton>Одно задание</SingleTaskModeButton>
       </WrapperControls>
+      <br />
+      
+      <SingleTaskMode />
 
     </div>
   );
