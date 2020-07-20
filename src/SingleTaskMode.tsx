@@ -1,8 +1,18 @@
 import React from 'react';
 import styled from 'styled-components'
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link,
+    Redirect,
+    useHistory,
+    useLocation
+} from "react-router-dom";
 
 const Wrapper = styled.div`
-    margin-left: 20px;
+    margin-left: 30%;
+    margin-top: 5%;
 `;
 
 const WrapperTodo = styled.div`
@@ -34,7 +44,14 @@ const Timer = styled.div``;
 
 const StartButton = styled.button``;
 
+const ListModeButton = styled.button``;
+
 export default function SingleTaskMode() {
+    let history = useHistory();
+    const handler = () => {
+        history.replace('/')
+    };
+
     return (
         <Wrapper>
             <WrapperTodo>
@@ -50,6 +67,7 @@ export default function SingleTaskMode() {
                 <Timer> 0:00 / 1:15 </Timer>
                 <StartButton>►</StartButton>
             </WrapperTimer>
+            <ListModeButton onClick={handler}>Список</ListModeButton>
         </Wrapper>
     )
 }
