@@ -10,14 +10,26 @@ import {
     useLocation
 } from "react-router-dom";
 
+const Button = styled.button`
+    font-size: 18px;
+    font-family: 'Cousine', monospace;
+`;
+
 const Wrapper = styled.div`
-    margin-left: 30%;
+    margin-left: auto;
+    margin-right: auto;    
     margin-top: 5%;
+    padding: 0;
+    width: 40vw;   
+    font-size: 18px;
+    font-family: 'Cousine', monospace;
 `;
 
 const WrapperTodo = styled.div`
     display: flex;
     flex-direction: row; 
+    justify-content: space-between;
+    margin-bottom: 10px;
 `;
 
 const TodoText = styled.li`
@@ -27,24 +39,38 @@ const TodoText = styled.li`
 
 const Time = styled.div``;
 
-const WrapperButtons = styled.div``;
+const WrapperButtons = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+`;
 
-const DeleteButton = styled.button``;
+const DeleteButton = styled(Button)``;
 
-const CompleteButton = styled.button``;
+const CompleteButton = styled(Button)``;
 
-const NextButton = styled.button``;
+const NextButton = styled(Button)``;
 
 const WrapperTimer = styled.div`
     display: flex;
     flex-direction: row; 
+    justify-content: space-between;
+    margin-bottom: 10px;
+    height: 26px;
 `;
 
-const Timer = styled.div``;
+const Timer = styled.div`
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+`;
 
-const StartButton = styled.button``;
+const StartButton = styled(Button)`
+    height: 100%;
+`;
 
-const ListModeButton = styled.button``;
+const ListModeButton = styled(Button)``;
 
 export default function SingleTaskMode() {
     let history = useHistory();

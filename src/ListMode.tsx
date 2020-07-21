@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import {
     BrowserRouter as Router,
@@ -6,60 +6,77 @@ import {
     Route,
     Link,
     Redirect,
-    useHistory,
-    useLocation
+    useHistory
 } from "react-router-dom";
 
-const Wrapper = styled.div`
-    margin-left: 30%;
-    margin-top: 5%;
+const Button = styled.button`
+    font-size: 18px;
+    font-family: 'Cousine', monospace;
 `;
 
-const WrapperTodo = styled.div`
-
+const Wrapper = styled.div`
+    margin-left: auto;
+    margin-right: auto;    
+    margin-top: 5%;
+    padding: 0;
+    width: 80vw;    
+    font-size: 18px;
+    font-family: 'Cousine', monospace;
 `;
 
 const List = styled.ul`
-    margin: 0;
     padding: 0;
 `;
 
 const ListItem = styled.div`
     display: flex;
     flex-direction: row;
-    width: 300px;
-    justify-content: space-around;
+    justify-content: space-between;
     margin: 0;
     padding: 0;
 `;
 
-const Checkbox = styled.input`
-
-`;
+const Checkbox = styled.input``;
 
 const TodoText = styled.li`
     list-style-type: none;
+    width: 50%;
     margin: 0;
     padding: 0;
 `;
 
-const Time = styled.div``;
+const Time = styled.div`
+    width: 5%;
+`;
 
-const Delete = styled.button``;
+const Delete = styled(Button)``;
 
 const Slide = styled.div``;
 
 const WrapperAddTodo = styled.div`
+    margin-bottom: 20px;
 `;
 
 const WrapperControls = styled.div`
 `;
 
-const InputTodo = styled.input``;
+const InputTodo = styled.input`
+    width: 30%;
+    font-size: 18px;
+    font-family: 'Cousine', monospace;
+    margin-right: 10px;
+`;
 
-const AddTodo = styled.button``;
+const AddTodo = styled(Button)``;
 
-const SingleTaskModeButton = styled.button``;
+const SingleTaskModeButton = styled(Button)``;
+
+type Todo = {
+    data: string,
+    checked: boolean,
+    id: number,
+    startTime?: number
+}
 
 export default function ListMode() {
     let history = useHistory();
@@ -67,29 +84,42 @@ export default function ListMode() {
         history.replace('/single')
     };
 
+    const list: readonly Todo[] = [];
+    const [state, setState] = useState(list);
+    const [inputValue, setValue] = useState('');
+
+    const onCheckboxChange = (item: Todo) =>
+        (event: React.ChangeEvent<HTMLInputElement>) => setState(state.map(i => {
+            if (i.id === item.id) {
+                return {data: i.data, checked: event.target.checked, id: i.id};
+            } else {
+                return i;
+            }
+        }));
+
+    const addNewTodo = () => {
+        setState([...state, {data: inputValue, checked: false, id: Math.random()}]);
+        setValue('');
+    }
+
     return (
         <Wrapper>
-            <WrapperTodo>
-                <List>
+            <List>
+                {state.map(item =>
                     <ListItem>
-                        <Checkbox type="checkbox"/>
-                        <TodoText>sdfsdf</TodoText>
-                        <Time>15:00</Time>
+                        <Checkbox type='checkbox' checked={item.checked}
+                                  onChange={onCheckboxChange(item)}
+                        />
+                        <TodoText style={item.checked ? {textDecoration: "line-through"} : {}}> {item.data} </TodoText>
+                        <Time style={item.checked ? {textDecoration: "line-through"} : {}}>15:00</Time>
                         <Delete>X</Delete>
                         <Slide>|</Slide>
                     </ListItem>
-                    <ListItem>
-                        <Checkbox type="checkbox"/>
-                        <TodoText>sfsdfsfda</TodoText>
-                        <Time>--:--</Time>
-                        <Delete>X</Delete>
-                        <Slide>|</Slide>
-                    </ListItem>
-                </List>
-            </WrapperTodo>
+                )}
+            </List>
             <WrapperAddTodo>
-                <InputTodo type="text"/>
-                <AddTodo>Добавить</AddTodo>
+                <InputTodo type="text" onChange={(event) => setValue(event.target.value)} value={inputValue}/>
+                <AddTodo onClick={addNewTodo}>Добавить</AddTodo>
             </WrapperAddTodo>
             <WrapperControls>
                 <SingleTaskModeButton onClick={handler}>Одно задание</SingleTaskModeButton>
