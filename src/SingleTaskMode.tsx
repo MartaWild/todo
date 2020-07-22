@@ -20,7 +20,7 @@ const Wrapper = styled.div`
     margin-right: auto;    
     margin-top: 5%;
     padding: 0;
-    width: 40vw;   
+    width: 80vw;   
     font-size: 18px;
     font-family: 'Cousine', monospace;
 `;
@@ -29,12 +29,14 @@ const WrapperTodo = styled.div`
     display: flex;
     flex-direction: row; 
     justify-content: space-between;
-    margin-bottom: 10px;
+    margin-bottom: 50px;
 `;
 
 const TodoText = styled.li`
-  list-style-type: none;
-  margin-right: 10px;
+      list-style-type: none;
+      margin-right: 10px;
+      width: 80%;
+      text-align: center;
 `;
 
 const Time = styled.div``;
@@ -72,6 +74,10 @@ const StartButton = styled(Button)`
 
 const ListModeButton = styled(Button)``;
 
+const InfoButton = styled(Button)``;
+
+const PreviousButton = styled(Button)``;
+
 export default function SingleTaskMode() {
     let history = useHistory();
     const handler = () => {
@@ -85,15 +91,17 @@ export default function SingleTaskMode() {
                 <Time>15:00</Time>
             </WrapperTodo>
             <WrapperButtons>
+                <PreviousButton>←</PreviousButton>
+                <CompleteButton>Done!</CompleteButton>
                 <DeleteButton>X</DeleteButton>
-                <CompleteButton>Check</CompleteButton>
+                <InfoButton>?</InfoButton>
                 <NextButton>→</NextButton>
             </WrapperButtons>
             <WrapperTimer>
                 <Timer> 0:00 / 1:15 </Timer>
                 <StartButton>►</StartButton>
             </WrapperTimer>
-            <ListModeButton onClick={handler}>Список</ListModeButton>
+            <ListModeButton onClick={handler}>Весь список</ListModeButton>
         </Wrapper>
     )
 }

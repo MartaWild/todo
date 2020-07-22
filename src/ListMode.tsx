@@ -7,7 +7,7 @@ import {
     Link,
     Redirect,
     useHistory
-} from "react-router-dom";
+} from 'react-router-dom';
 
 const Button = styled.button`
     font-size: 18px;
@@ -32,7 +32,7 @@ const ListItem = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin: 0;
+    margin-bottom: 8px;
     padding: 0;
 `;
 
@@ -45,8 +45,10 @@ const TodoText = styled.li`
     padding: 0;
 `;
 
-const Time = styled.div`
-    width: 5%;
+const Time = styled.input`
+    width: 7%;
+    font-size: 18px;
+    font-family: 'Cousine', monospace;
 `;
 
 const Delete = styled(Button)``;
@@ -70,6 +72,9 @@ const InputTodo = styled.input`
 const AddTodo = styled(Button)``;
 
 const SingleTaskModeButton = styled(Button)``;
+
+const InfoButton = styled(Button)``;
+
 
 type Todo = {
     data: string,
@@ -100,7 +105,11 @@ export default function ListMode() {
     const addNewTodo = () => {
         setState([...state, {data: inputValue, checked: false, id: Math.random()}]);
         setValue('');
-    }
+    };
+
+    const deleteTodo = (id: number) => {
+        setState(state.filter(todo => todo.id !== id));
+    };
 
     return (
         <Wrapper>
@@ -111,8 +120,9 @@ export default function ListMode() {
                                   onChange={onCheckboxChange(item)}
                         />
                         <TodoText style={item.checked ? {textDecoration: "line-through"} : {}}> {item.data} </TodoText>
-                        <Time style={item.checked ? {textDecoration: "line-through"} : {}}>15:00</Time>
-                        <Delete>X</Delete>
+                        <Time type="time" style={item.checked ? {textDecoration: "line-through"} : {}} />
+                        <Delete onClick={() => deleteTodo(item.id)}>X</Delete>
+                        <InfoButton>?</InfoButton>
                         <Slide>|</Slide>
                     </ListItem>
                 )}
