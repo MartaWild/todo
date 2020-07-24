@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import {
     BrowserRouter as Router,
@@ -8,6 +8,8 @@ import {
     Redirect,
     useHistory
 } from 'react-router-dom';
+import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
+
 
 const Button = styled.button`
     font-size: 18px;
@@ -76,52 +78,37 @@ const SingleTaskModeButton = styled(Button)``;
 const InfoButton = styled(Button)``;
 
 
-type Todo = {
+export type Todo = {
     data: string,
     checked: boolean,
     id: number,
-    startTime?: number
+    startTime?: string
 }
 
-export default function ListMode() {
+export default function ListMode(props: {
+    todos: Todo[],
+    addNewTodo: (text: string) => void,
+    deleteTodo: (id: number) => void,
+    onCheckboxChange: (id: number) => (event: React.ChangeEvent<HTMLInputElement>) => void
+}) {
     let history = useHistory();
     const handler = () => {
         history.replace('/single')
     };
 
-    const list: readonly Todo[] = [];
-    const [state, setState] = useState(list);
     const [inputValue, setValue] = useState('');
-
-    const onCheckboxChange = (item: Todo) =>
-        (event: React.ChangeEvent<HTMLInputElement>) => setState(state.map(i => {
-            if (i.id === item.id) {
-                return {data: i.data, checked: event.target.checked, id: i.id};
-            } else {
-                return i;
-            }
-        }));
-
-    const addNewTodo = () => {
-        setState([...state, {data: inputValue, checked: false, id: Math.random()}]);
-        setValue('');
-    };
-
-    const deleteTodo = (id: number) => {
-        setState(state.filter(todo => todo.id !== id));
-    };
 
     return (
         <Wrapper>
             <List>
-                {state.map(item =>
+                {props.todos.map(item =>
                     <ListItem>
                         <Checkbox type='checkbox' checked={item.checked}
-                                  onChange={onCheckboxChange(item)}
+                                  onChange={props.onCheckboxChange(item.id)}
                         />
                         <TodoText style={item.checked ? {textDecoration: "line-through"} : {}}> {item.data} </TodoText>
-                        <Time type="time" style={item.checked ? {textDecoration: "line-through"} : {}} />
-                        <Delete onClick={() => deleteTodo(item.id)}>X</Delete>
+                        <Time type="time" style={item.checked ? {textDecoration: "line-through"} : {}}/>
+                        <Delete onClick={() => props.deleteTodo(item.id)}>X</Delete>
                         <InfoButton>?</InfoButton>
                         <Slide>|</Slide>
                     </ListItem>
@@ -129,7 +116,7 @@ export default function ListMode() {
             </List>
             <WrapperAddTodo>
                 <InputTodo type="text" onChange={(event) => setValue(event.target.value)} value={inputValue}/>
-                <AddTodo onClick={addNewTodo}>Добавить</AddTodo>
+                <AddTodo onClick={() => {props.addNewTodo(inputValue); setValue('')}}>Добавить</AddTodo>
             </WrapperAddTodo>
             <WrapperControls>
                 <SingleTaskModeButton onClick={handler}>Одно задание</SingleTaskModeButton>
