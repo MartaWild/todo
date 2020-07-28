@@ -21,6 +21,11 @@ function App() {
     }, []);
 
     const addNewTodo = (text: string) => {
+        fetch('/api/v1/todos', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({data: text, checked: false, id: Math.random()})
+        });
         setTodos([...todos, {data: text, checked: false, id: Math.random()}]);
     };
 
