@@ -46,6 +46,17 @@ function App() {
             }
         }));
 
+    const setDone = (todoId:number) => {
+        setTodos(todos.map(i => {
+                if (i.id === todoId) {
+                    return {data: i.data, checked: true, id: i.id};
+                } else {
+                    return i;
+                }
+            }
+        ))
+    };
+
     return (
         <div className="App">
             <Router basename={window.location.pathname || ''}>
@@ -56,7 +67,7 @@ function App() {
                                   deleteTodo={deleteTodo}
                                   onCheckboxChange={onCheckboxChange}
                         /> } />
-                    <Route exact path='/single' render={() => <SingleTaskMode todos={todos}/> }/>
+                    <Route exact path='/single' render={() => <SingleTaskMode todos={todos} setDone={setDone}/> }/>
                 </Switch>
             </Router>
         </div>

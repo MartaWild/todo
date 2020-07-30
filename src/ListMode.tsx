@@ -86,6 +86,7 @@ export default function ListMode(props: {
     deleteTodo: (id: number) => void,
     onCheckboxChange: (id: number) => (event: React.ChangeEvent<HTMLInputElement>) => void
 }) {
+
     let history = useHistory();
     const handler = () => {
         history.replace('/single')
@@ -93,10 +94,21 @@ export default function ListMode(props: {
 
     const [inputValue, setValue] = useState('');
 
+    const handleKeyDown = (event: React.KeyboardEvent) => {
+        if (event.key === 'Enter') {
+            props.addNewTodo(inputValue); setValue('')
+        }
+    };
+
     return (
         <Wrapper>
             <WrapperAddTodo>
-                <InputTodo type="text" onChange={(event) => setValue(event.target.value)} value={inputValue}/>
+                <InputTodo type="text"
+                           onChange={(event) => setValue(event.target.value)}
+                           onKeyDown={handleKeyDown}
+                           value={inputValue}
+                           autoFocus
+                />
                 <AddTodo onClick={() => {props.addNewTodo(inputValue); setValue('')}}>Добавить</AddTodo>
                 <SingleTaskModeButton onClick={handler}>Одно задание</SingleTaskModeButton>
             </WrapperAddTodo>

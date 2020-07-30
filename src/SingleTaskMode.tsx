@@ -85,7 +85,10 @@ export type Todo = {
     startTime?: string
 }
 
-export default function SingleTaskMode(props: {todos : Todo[]}) {
+export default function SingleTaskMode(props: {
+    todos : Todo[],
+    setDone : (id: number) => void}){
+
     const [index, setindex] = useState(0);
 
     let history = useHistory();
@@ -113,7 +116,7 @@ export default function SingleTaskMode(props: {todos : Todo[]}) {
             </WrapperTodo>
             <WrapperButtons>
                 <PreviousButton onClick={previousTodo}>←</PreviousButton>
-                <CompleteButton>Done!</CompleteButton>
+                <CompleteButton onClick={() => {props.setDone(props.todos[index].id); nextTodo()}}>Done!</CompleteButton>
                 <NextButton onClick={nextTodo}>→</NextButton>
             </WrapperButtons>
             <WrapperTimer>
