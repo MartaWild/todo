@@ -64,7 +64,9 @@ const InputTodo = styled.input`
     margin-right: 10px;
 `;
 
-const AddTodo = styled(Button)``;
+const AddTodo = styled(Button)`
+  margin-right: 10px;
+`;
 
 const SingleTaskModeButton = styled(Button)``;
 
@@ -93,6 +95,14 @@ export default function ListMode(props: {
 
     return (
         <Wrapper>
+            <WrapperAddTodo>
+                <InputTodo type="text" onChange={(event) => setValue(event.target.value)} value={inputValue}/>
+                <AddTodo onClick={() => {props.addNewTodo(inputValue); setValue('')}}>Добавить</AddTodo>
+                <SingleTaskModeButton onClick={handler}>Одно задание</SingleTaskModeButton>
+            </WrapperAddTodo>
+            <WrapperControls>
+
+            </WrapperControls>
             <List>
                 {props.todos.map(item =>
                     <ListItem>
@@ -107,13 +117,6 @@ export default function ListMode(props: {
                     </ListItem>
                 )}
             </List>
-            <WrapperAddTodo>
-                <InputTodo type="text" onChange={(event) => setValue(event.target.value)} value={inputValue}/>
-                <AddTodo onClick={() => {props.addNewTodo(inputValue); setValue('')}}>Добавить</AddTodo>
-            </WrapperAddTodo>
-            <WrapperControls>
-                <SingleTaskModeButton onClick={handler}>Одно задание</SingleTaskModeButton>
-            </WrapperControls>
         </Wrapper>
     );
 }

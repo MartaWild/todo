@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components'
 import {
     BrowserRouter as Router,
@@ -86,23 +86,35 @@ export type Todo = {
 }
 
 export default function SingleTaskMode(props: {todos : Todo[]}) {
+    const [index, setindex] = useState(0);
+
     let history = useHistory();
     const handler = () => {
         history.replace('/')
     };
 
+    const nextTodo = () => {
+        if (index+1 <= props.todos.length-1){
+            setindex(index+1)
+        }
+    };
+
+    const previousTodo = () => {
+        if (index-1 >= 0){
+            setindex(index-1)
+        }
+    }
+
     return (
         <Wrapper>
             <WrapperTodo>
-                <TodoText></TodoText>
-                <Time>15:00</Time>
+                <TodoText>{props.todos[index].data}</TodoText>
+                <Time>{props.todos[index].startTime ? props.todos[index].startTime : "--:--"}</Time>
             </WrapperTodo>
             <WrapperButtons>
-                <PreviousButton>←</PreviousButton>
+                <PreviousButton onClick={previousTodo}>←</PreviousButton>
                 <CompleteButton>Done!</CompleteButton>
-                <DeleteButton>X</DeleteButton>
-                <InfoButton>?</InfoButton>
-                <NextButton>→</NextButton>
+                <NextButton onClick={nextTodo}>→</NextButton>
             </WrapperButtons>
             <WrapperTimer>
                 <Timer> 0:00 / 1:15 </Timer>
