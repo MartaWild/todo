@@ -78,7 +78,14 @@ const InfoButton = styled(Button)``;
 
 const PreviousButton = styled(Button)``;
 
-export default function SingleTaskMode() {
+export type Todo = {
+    data: string,
+    checked: boolean,
+    id: number,
+    startTime?: string
+}
+
+export default function SingleTaskMode(props: {todos : Todo[]}) {
     let history = useHistory();
     const handler = () => {
         history.replace('/')
@@ -87,7 +94,7 @@ export default function SingleTaskMode() {
     return (
         <Wrapper>
             <WrapperTodo>
-                <TodoText>sdfsdf</TodoText>
+                <TodoText></TodoText>
                 <Time>15:00</Time>
             </WrapperTodo>
             <WrapperButtons>

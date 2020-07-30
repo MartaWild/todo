@@ -11,6 +11,7 @@ import ListMode, {Todo} from "./ListMode";
 
 function App() {
     const [todos, setTodos] = useState<Todo[]>([]);
+
     useEffect(() =>{
         fetch('/api/v1/todos')
             .then(response => response.json())
@@ -30,6 +31,9 @@ function App() {
     };
 
     const deleteTodo = (id: number) => {
+        fetch('/api/v1/todos/' + id, {
+            method: 'DELETE'
+        });
         setTodos(todos.filter(todo => todo.id !== id));
     };
 
@@ -52,7 +56,7 @@ function App() {
                                   deleteTodo={deleteTodo}
                                   onCheckboxChange={onCheckboxChange}
                         /> } />
-                    <Route exact path='/single' render={() => <SingleTaskMode /> }/>
+                    <Route exact path='/single' render={() => <SingleTaskMode todos={todos}/> }/>
                 </Switch>
             </Router>
         </div>
