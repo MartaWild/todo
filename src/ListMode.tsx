@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
-
+import { Todo } from './types'
+import TodoItem from "./TodoItem";
 
 const Button = styled.button`
     font-size: 18px;
@@ -17,38 +18,13 @@ const Wrapper = styled.div`
     width: 80vw;    
     font-size: 18px;
     font-family: 'Cousine', monospace;
+    user-select: none;
 `;
 
 const List = styled.ul`
     padding: 0;
 `;
 
-const ListItem = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    padding: 0;
-`;
-
-const Checkbox = styled.input``;
-
-const TodoText = styled.li`
-    list-style-type: none;
-    width: 50%;
-    margin: 0;
-    padding: 0;
-`;
-
-const Time = styled.input`
-    width: 7%;
-    font-size: 18px;
-    font-family: 'Cousine', monospace;
-`;
-
-const Delete = styled(Button)``;
-
-const Slide = styled.div``;
 
 const WrapperAddTodo = styled.div`
     margin-bottom: 20px;
@@ -58,7 +34,7 @@ const WrapperControls = styled.div`
 `;
 
 const InputTodo = styled.input`
-    width: 30%;
+    width: 50%;
     font-size: 18px;
     font-family: 'Cousine', monospace;
     margin-right: 10px;
@@ -70,21 +46,21 @@ const AddTodo = styled(Button)`
 
 const SingleTaskModeButton = styled(Button)``;
 
-const InfoButton = styled(Button)``;
 
 
-export type Todo = {
-    data: string,
-    checked: boolean,
-    id: number,
-    startTime?: string
-}
+const reorder = (list: Todo[], startIndex: number, endIndex: number) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+    return result;
+};
 
 export default function ListMode(props: {
     todos: Todo[],
     addNewTodo: (text: string) => void,
     deleteTodo: (id: number) => void,
-    onCheckboxChange: (id: number) => (event: React.ChangeEvent<HTMLInputElement>) => void
+    onCheckboxChange: (id: number) => (event: React.ChangeEvent<HTMLInputElement>) => void,
+    setTodos: (todos: Todo[]) => void
 }) {
 
     let history = useHistory();
@@ -98,6 +74,20 @@ export default function ListMode(props: {
         if (event.key === 'Enter') {
             props.addNewTodo(inputValue); setValue('')
         }
+    };
+
+    const onDragEnd = (result : any) => {
+        if (!result.destination) {
+            return;
+        }
+
+        const items = reorder(
+            props.todos,
+            result.source.index,
+            result.destination.index
+        );
+
+        props.setTodos(items);
     };
 
     return (
@@ -115,20 +105,25 @@ export default function ListMode(props: {
             <WrapperControls>
 
             </WrapperControls>
-            <List>
-                {props.todos.map(item =>
-                    <ListItem>
-                        <Checkbox type='checkbox' checked={item.checked}
-                                  onChange={props.onCheckboxChange(item.id)}
-                        />
-                        <TodoText style={item.checked ? {textDecoration: "line-through"} : {}}> {item.data} </TodoText>
-                        <Time type="time" style={item.checked ? {textDecoration: "line-through"} : {}}/>
-                        <Delete onClick={() => props.deleteTodo(item.id)}>X</Delete>
-                        <InfoButton>?</InfoButton>
-                        <Slide>|</Slide>
-                    </ListItem>
-                )}
-            </List>
+            <DragDropContext onDragEnd={onDragEnd} >
+                <Droppable droppableId="droppable">
+                    {(provided, snapshot) =>(
+                        <List {...provided.droppableProps}
+                              ref={provided.innerRef}
+                        >
+                            {props.todos.map((item, index) => (
+                                <TodoItem item={item}
+                                          index={index}
+                                          addNewTodo={props.addNewTodo}
+                                          deleteTodo={props.deleteTodo}
+                                          onCheckboxChange={props.onCheckboxChange}
+                                />
+
+                            ))}
+                        </List>
+                    )}
+                </Droppable>
+            </DragDropContext>
         </Wrapper>
     );
 }

@@ -6,14 +6,16 @@ import {
     Route
 } from "react-router-dom";
 import SingleTaskMode from './SingleTaskMode';
-import ListMode, {Todo} from "./ListMode";
+import ListMode from "./ListMode";
+import { Todo } from './types'
 
+const prefix = 'http://localhost:4000';
 
 function App() {
     const [todos, setTodos] = useState<Todo[]>([]);
 
     useEffect(() =>{
-        fetch('/api/v1/todos')
+        fetch(prefix + '/api/v1/todos')
             .then(response => response.json())
             .then(todos => {
                 setTodos(todos);
@@ -22,7 +24,7 @@ function App() {
     }, []);
 
     const addNewTodo = (text: string) => {
-        fetch('/api/v1/todos', {
+        fetch(prefix + '/api/v1/todos', {
             method: 'POST',
             headers: {'Content-Type':'application/json'},
             body: JSON.stringify({data: text, checked: false, id: Math.random()})
@@ -31,7 +33,7 @@ function App() {
     };
 
     const deleteTodo = (id: number) => {
-        fetch('/api/v1/todos/' + id, {
+        fetch(prefix + '/api/v1/todos/' + id, {
             method: 'DELETE'
         });
         setTodos(todos.filter(todo => todo.id !== id));
@@ -66,6 +68,7 @@ function App() {
                                   addNewTodo={addNewTodo}
                                   deleteTodo={deleteTodo}
                                   onCheckboxChange={onCheckboxChange}
+                                  setTodos={setTodos}
                         /> } />
                     <Route exact path='/single' render={() => <SingleTaskMode todos={todos} setDone={setDone}/> }/>
                 </Switch>

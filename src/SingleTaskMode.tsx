@@ -1,14 +1,7 @@
 import React, {useState} from 'react';
 import styled from 'styled-components'
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link,
-    Redirect,
-    useHistory,
-    useLocation
-} from "react-router-dom";
+import {useHistory} from "react-router-dom";
+import { Todo } from './types'
 
 const Button = styled.button`
     font-size: 18px;
@@ -78,13 +71,6 @@ const InfoButton = styled(Button)``;
 
 const PreviousButton = styled(Button)``;
 
-export type Todo = {
-    data: string,
-    checked: boolean,
-    id: number,
-    startTime?: string
-}
-
 export default function SingleTaskMode(props: {
     todos : Todo[],
     setDone : (id: number) => void}){
@@ -112,7 +98,6 @@ export default function SingleTaskMode(props: {
         <Wrapper>
             <WrapperTodo>
                 <TodoText>{props.todos[index].data}</TodoText>
-                <Time>{props.todos[index].startTime ? props.todos[index].startTime : "--:--"}</Time>
             </WrapperTodo>
             <WrapperButtons>
                 <PreviousButton onClick={previousTodo}>←</PreviousButton>
