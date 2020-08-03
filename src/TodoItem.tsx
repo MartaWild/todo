@@ -6,6 +6,7 @@ import { Todo } from './types'
 const Button = styled.button`
     font-size: 18px;
     font-family: 'Cousine', monospace;
+    color: #07635C;
 `;
 
 const ListItem = styled.div`
@@ -14,10 +15,11 @@ const ListItem = styled.div`
     justify-content: space-between;
     margin-bottom: 8px;
     padding: 0;
+    background: white;
 `;
 
 const Checkbox = styled.input`
-    transform: scale(1.5)
+    transform: scale(1.5);
 `;
 
 const TodoText = styled.li`
@@ -32,8 +34,6 @@ const Time = styled.input`
     font-size: 18px;
     font-family: 'Cousine', monospace;
 `;
-
-const InfoButton = styled(Button)``;
 
 const Delete = styled(Button)``;
 
@@ -64,7 +64,6 @@ export default function TodoItem (props: {
                     />
                     <TodoText style={item.checked ? {textDecoration: "line-through"} : {}}> {item.data} </TodoText>
                     <Delete onClick={() => props.deleteTodo(item.id)}>X</Delete>
-                    <InfoButton>?</InfoButton>
                     <Slide>|</Slide>
                 </ListItem>
             )}

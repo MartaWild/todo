@@ -8,6 +8,7 @@ import TodoItem from "./TodoItem";
 const Button = styled.button`
     font-size: 18px;
     font-family: 'Cousine', monospace;
+    color: #07635C;
 `;
 
 const Wrapper = styled.div`
@@ -19,6 +20,7 @@ const Wrapper = styled.div`
     font-size: 18px;
     font-family: 'Cousine', monospace;
     user-select: none;
+    color: #07635C;
 `;
 
 const List = styled.ul`
@@ -27,7 +29,7 @@ const List = styled.ul`
 
 
 const WrapperAddTodo = styled.div`
-    margin-bottom: 20px;
+    margin-bottom: 4%;
 `;
 
 const WrapperControls = styled.div`
@@ -38,14 +40,18 @@ const InputTodo = styled.input`
     font-size: 18px;
     font-family: 'Cousine', monospace;
     margin-right: 10px;
+    color: #07635C;
 `;
 
 const AddTodo = styled(Button)`
-  margin-right: 10px;
+    margin-right: 10px;
 `;
 
 const SingleTaskModeButton = styled(Button)``;
 
+const TodayDate = styled.div`
+    margin: 5% 0 3% 0;
+`;
 
 
 const reorder = (list: Todo[], startIndex: number, endIndex: number) => {
@@ -54,6 +60,13 @@ const reorder = (list: Todo[], startIndex: number, endIndex: number) => {
     result.splice(endIndex, 0, removed);
     return result;
 };
+
+const today = new Date();
+const date = String(today.getDate()).padStart(2, '0');
+const month = today.toLocaleString('default', { month: 'short' });
+const year = today.getFullYear();
+const weekDay = today.toLocaleString('default', { weekday: 'short' });
+const fullDate = weekDay + ', ' + date + ' ' +  month + ' ' + year;
 
 export default function ListMode(props: {
     todos: Todo[],
@@ -92,6 +105,9 @@ export default function ListMode(props: {
 
     return (
         <Wrapper>
+            <TodayDate>
+                {fullDate}
+            </TodayDate>
             <WrapperAddTodo>
                 <InputTodo type="text"
                            onChange={(event) => setValue(event.target.value)}
