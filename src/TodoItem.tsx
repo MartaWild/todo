@@ -39,7 +39,6 @@ const Delete = styled(Button)``;
 
 const Slide = styled.div``;
 
-
 export default function TodoItem (props: {
     addNewTodo: (text: string) => void,
     deleteTodo: (id: number) => void,
@@ -48,7 +47,7 @@ export default function TodoItem (props: {
     index: number
 }){
 
-    const {item, index}= props;
+    const {item, index} = props;
 
     return (
         <Draggable key={item.id} draggableId={item.id.toString()} index={index}>

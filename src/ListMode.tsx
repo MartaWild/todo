@@ -53,7 +53,6 @@ const TodayDate = styled.div`
     margin: 5% 0 3% 0;
 `;
 
-
 const reorder = (list: Todo[], startIndex: number, endIndex: number) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);

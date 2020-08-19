@@ -8,7 +8,7 @@ const db = new sqlite.Database('todos.sqlite');
 
 //выполняется до других действий c db
 db.serialize(() => {
-    db.run('CREATE TABLE IF NOT EXISTS todos (id INTEGER, checked BOOLEAN, data TEXT, start_time TEXT)');
+    db.run('CREATE TABLE IF NOT EXISTS todos (id INTEGER, checked BOOLEAN, data TEXT, item_order INTEGER)');
 
 });
 
@@ -20,9 +20,9 @@ app.get('/api/v1/todos', (request, response) => {
     db.all('SELECT * FROM todos', (err, rows) => {
         const todos = rows.map(r => ({
             data: r.data,
-            startTime: r.start_time,
             id: r.id,
-            checked: r.checked
+            checked: r.checked,
+            order: r.item_order
         }));
         response.json(todos)
     });
@@ -30,12 +30,12 @@ app.get('/api/v1/todos', (request, response) => {
 
 app.post('/api/v1/todos', (request, response) => {
     db.serialize(() =>{
-        const statement = db.prepare('INSERT INTO todos (id, checked, data, start_time) VALUES (?, ?, ?, ?)');
+        const statement = db.prepare('INSERT INTO todos (id, checked, data, item_order) VALUES (?, ?, ?, ?)');
         statement.run(
             request.body.id,
             request.body.checked,
             request.body.data,
-            (request.body.start_time ? request.body.start_time : null),
+            request.body.order,
             err => {
                 if (err) {
                     response.sendStatus(500)

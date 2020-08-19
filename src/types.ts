@@ -1,5 +1,6 @@
 export type Todo = {
     data: string,
     checked: boolean,
-    id: number
+    id: number,
+    order: number
 }
