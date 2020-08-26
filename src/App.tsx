@@ -31,7 +31,6 @@ function App() {
             .then(response => response.json())
             .then(todos => {
                 setTodos(todos);
-                console.log(todos)
             })
     }, []);
 
@@ -56,17 +55,30 @@ function App() {
     };
 
     const onCheckboxChange = (todoId: number) =>
-        (event: React.ChangeEvent<HTMLInputElement>) => setTodos(todos.map(i => {
-            if (i.id === todoId) {
-                return {data: i.data, checked: event.target.checked, id: i.id, order: i.order};
-            } else {
-                return i;
-            }
-        }));
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            setTodos(todos.map(i => {
+                if (i.id === todoId) {
+                    fetch(prefix + '/api/v1/todos/' + todoId, {
+                        method: 'PUT',
+                        headers: {'Content-Type':'application/json'},
+                        body: JSON.stringify({data: i.data, checked: !i.checked, id: i.id, order: i.order})
+                    });
+                    return {data: i.data, checked: event.target.checked, id: i.id, order: i.order};
+                } else {
+                    return i;
+                }
+            }));
+
+    };
 
     const setDone = (todoId:number) => {
         setTodos(todos.map(i => {
                 if (i.id === todoId) {
+                    fetch(prefix + '/api/v1/todos/' + todoId, {
+                        method: 'PUT',
+                        headers: {'Content-Type':'application/json'},
+                        body: JSON.stringify({data: i.data, checked: true, id: i.id, order: i.order})
+                    });
                     return {data: i.data, checked: true, id: i.id, order: i.order};
                 } else {
                     return i;

@@ -5,6 +5,8 @@ import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
 import { Todo } from './types'
 import TodoItem from "./TodoItem";
 
+const prefix = 'http://localhost:4000';
+
 const Button = styled.button`
     font-size: 18px;
     font-family: 'Cousine', monospace;
@@ -57,7 +59,7 @@ const reorder = (list: Todo[], startIndex: number, endIndex: number) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
-    return result;
+    return result.map((el, index) => {return {data: el.data, checked: el.checked, id: el.id, order: index}});
 };
 
 const today = new Date();
@@ -100,6 +102,17 @@ export default function ListMode(props: {
         );
 
         props.setTodos(items);
+        for(let i = 0; i < items.length; i++){
+            fetch(prefix + '/api/v1/todos/' + items[i].id, {
+                method: 'PUT',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({
+                        data: items[i].data,
+                        checked: items[i].checked, id: items[i].id,
+                        order: items[i].order
+                })
+            });
+        }
     };
 
     return (
@@ -132,6 +145,7 @@ export default function ListMode(props: {
                                           addNewTodo={props.addNewTodo}
                                           deleteTodo={props.deleteTodo}
                                           onCheckboxChange={props.onCheckboxChange}
+                                          key={item.id}
                                 />
 
                             ))}

@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.get('/api/v1/todos', (request, response) => {
-    db.all('SELECT * FROM todos', (err, rows) => {
+    db.all('SELECT * FROM todos ORDER BY item_order', (err, rows) => {
         const todos = rows.map(r => ({
             data: r.data,
             id: r.id,
@@ -52,6 +52,41 @@ app.delete('/api/v1/todos/:id', (req, res) => {
     db.serialize(() => {
         const statement = db.prepare('DELETE FROM todos WHERE id=?');
         statement.run(
+            req.params.id,
+            err => {
+                if (err) {
+                    res.sendStatus(500)
+                } else {
+                    res.sendStatus(200)
+                }
+            })
+    })
+});
+
+app.put('/api/v1/todos/:id', (req, res) => {
+    db.serialize(() => {
+        const statement = db.prepare('UPDATE todos SET data=?, checked=?, id=?, item_order=? WHERE id=?');
+        statement.run(
+            req.body.data,
+            req.body.checked,
+            req.body.id,
+            req.body.order,
+            req.params.id,
+            err => {
+                if (err) {
+                    res.sendStatus(500)
+                } else {
+                    res.sendStatus(200)
+                }
+            })
+    })
+});
+
+app.put('/api/v1/todos/:id', (req, res) => {
+    db.serialize(() => {
+        const statement = db.prepare('UPDATE todos SET item_order=? WHERE id=?');
+        statement.run(
+            req.body.order,
             req.params.id,
             err => {
                 if (err) {
