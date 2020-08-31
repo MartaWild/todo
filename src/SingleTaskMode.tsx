@@ -82,26 +82,41 @@ export default function SingleTaskMode(props: {
         history.replace('/')
     };
 
+    const getIncompleteTodos = () =>{
+        return props.todos.filter(todo => todo.checked == false);
+    };
+
+    const incompleteTodos = getIncompleteTodos();
+
     const nextTodo = () => {
-        if (index+1 <= props.todos.length-1){
-            setindex(index+1)
+        if (newIndex+1 < incompleteTodos.length){
+            setindex(newIndex+1)
         }
     };
 
     const previousTodo = () => {
-        if (index-1 >= 0){
-            setindex(index-1)
+        if (newIndex-1 >= 0){
+            setindex(newIndex-1)
         }
-    }
+    };
+
+    const newIndex = Math.min(incompleteTodos.length-1, index);
+
+    const handleCompleteButton = () => {
+        if (incompleteTodos.length > 0){
+            props.setDone(incompleteTodos[newIndex].id);
+            nextTodo();
+        };
+    };
 
     return (
         <Wrapper>
             <WrapperTodo>
-                <TodoText>{props.todos[index].data}</TodoText>
+                <TodoText>{incompleteTodos.length > 0 ? incompleteTodos[newIndex].data : "Нет заданий"}</TodoText>
             </WrapperTodo>
             <WrapperButtons>
                 <PreviousButton onClick={previousTodo}>←</PreviousButton>
-                <CompleteButton onClick={() => {props.setDone(props.todos[index].id); nextTodo()}}>Done!</CompleteButton>
+                <CompleteButton onClick={handleCompleteButton}> Done! </CompleteButton>
                 <NextButton onClick={nextTodo}>→</NextButton>
             </WrapperButtons>
             <WrapperTimer>
