@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import styled from 'styled-components'
 import {useHistory} from "react-router-dom";
-import { Todo } from './types'
+import { Todo } from './types';
+import Stopwatch from "./Stopwatch";
 
 const Button = styled.button`
     font-size: 18px;
@@ -90,13 +91,13 @@ export default function SingleTaskMode(props: {
 
     const nextTodo = () => {
         if (newIndex+1 < incompleteTodos.length){
-            setindex(newIndex+1)
+            setindex(newIndex+1);
         }
     };
 
     const previousTodo = () => {
         if (newIndex-1 >= 0){
-            setindex(newIndex-1)
+            setindex(newIndex-1);
         }
     };
 
@@ -106,7 +107,7 @@ export default function SingleTaskMode(props: {
         if (incompleteTodos.length > 0){
             props.setDone(incompleteTodos[newIndex].id);
             nextTodo();
-        };
+        }
     };
 
     return (
@@ -119,10 +120,7 @@ export default function SingleTaskMode(props: {
                 <CompleteButton onClick={handleCompleteButton}> Done! </CompleteButton>
                 <NextButton onClick={nextTodo}>→</NextButton>
             </WrapperButtons>
-            <WrapperTimer>
-                <Timer> 0:00 / 1:15 </Timer>
-                <StartButton>►</StartButton>
-            </WrapperTimer>
+            <Stopwatch />
             <ListModeButton onClick={handler}>Весь список</ListModeButton>
         </Wrapper>
     )
