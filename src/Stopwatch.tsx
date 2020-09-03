@@ -1,6 +1,37 @@
 import React, {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components';
 
+const WrapperTimer = styled.div`
+    display: flex;
+    flex-direction: row; 
+    justify-content: space-between;
+    margin-bottom: 10px;
+    margin-top: 40px;
+    height: 26px;
+    font-size: 18px;
+`;
+
+const Timer = styled.div`
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 18px;
+`;
+
+const Button = styled.button`
+    font-size: 18px;
+    font-family: 'Cousine', monospace;
+`;
+
+const StartButton = styled(Button)`
+    height: 100%;
+`;
+
+const ResetButton = styled(Button)`
+    height: 100%;
+`;
+
 
 function useInterval(callback: () => void, delay: number | null) {
     const savedCallback = useRef<null | (() => void)>(null);
@@ -28,29 +59,6 @@ function useInterval(callback: () => void, delay: number | null) {
 }
 
 
-const WrapperTimer = styled.div`
-    display: flex;
-    flex-direction: row; 
-    justify-content: space-between;
-    margin-bottom: 10px;
-    height: 26px;
-`;
-
-const Timer = styled.div`
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-    justify-content: center;
-`;
-
-const Button = styled.button`
-    font-size: 18px;
-    font-family: 'Cousine', monospace;
-`;
-
-const StartButton = styled(Button)`
-    height: 100%;
-`;
 
 export default function StopWatch() {
     const [sec, setSec] = useState(0);
@@ -71,7 +79,7 @@ export default function StopWatch() {
         }, isRunning ? delay : null);
 
 
-        return <h1>{formatTime(sec)}</h1>;
+        return <p>{formatTime(sec)}</p>;
     }
 
      return (
@@ -79,7 +87,8 @@ export default function StopWatch() {
              <Timer>
                 <Counter />
              </Timer>
-             <StartButton onClick={() => setIsRunning(!isRunning)}>►</StartButton>
+             <StartButton onClick={() => setIsRunning(!isRunning)}> ► </StartButton>
+             <ResetButton onClick={() => {setIsRunning(false); setSec(0)}}> Сброс </ResetButton>
          </WrapperTimer>
      )
 

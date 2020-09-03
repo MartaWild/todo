@@ -47,25 +47,6 @@ const CompleteButton = styled(Button)``;
 
 const NextButton = styled(Button)``;
 
-const WrapperTimer = styled.div`
-    display: flex;
-    flex-direction: row; 
-    justify-content: space-between;
-    margin-bottom: 10px;
-    height: 26px;
-`;
-
-const Timer = styled.div`
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-    justify-content: center;
-`;
-
-const StartButton = styled(Button)`
-    height: 100%;
-`;
-
 const ListModeButton = styled(Button)``;
 
 const InfoButton = styled(Button)``;
