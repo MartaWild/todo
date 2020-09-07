@@ -67,7 +67,6 @@ function App() {
                     return i;
                 }
             }));
-
     };
 
     const setDone = (todoId:number) => {
