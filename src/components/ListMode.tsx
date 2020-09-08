@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
-import { Todo } from './types'
+import { Todo } from '../types'
 import TodoItem from "./TodoItem";
 
 const prefix = 'http://localhost:4000';

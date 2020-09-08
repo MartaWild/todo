@@ -1,9 +1,10 @@
-import { ADD_TODO, DELETE_TODO } from "./actionTypes";
+import { ADD_TODO, DELETE_TODO, SET_TODOS } from "./actionTypes";
+import {Todo} from "../types";
 
-export const addTodo = (text: string, checked: boolean, id: number, order: number) => ({
+export const addTodo = (data: string, checked: boolean, id: number, order: number) => ({
     type: ADD_TODO,
     payload: {
-        text,
+        data,
         checked,
         id,
         order
@@ -15,4 +16,12 @@ export const deleteTodo = (id: number) => ({
     payload: {
         id
     }
+});
+
+export const setTodos = (todos: Todo[]) => ({
+    type: SET_TODOS,
+    payload: {
+        todos
+    }
+
 });

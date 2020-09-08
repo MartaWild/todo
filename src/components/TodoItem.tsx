@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
-import { Todo } from './types'
+import { Todo } from '../types'
 
 const Button = styled.button`
     font-size: 18px;
