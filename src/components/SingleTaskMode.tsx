@@ -7,6 +7,7 @@ import Stopwatch from "./Stopwatch";
 const Button = styled.button`
     font-size: 18px;
     font-family: 'Cousine', monospace;
+    color: #07635C;
 `;
 
 const Wrapper = styled.div`
@@ -17,6 +18,7 @@ const Wrapper = styled.div`
     width: 80vw;   
     font-size: 18px;
     font-family: 'Cousine', monospace;
+    color: #07635C;
 `;
 
 const WrapperTodo = styled.div`
@@ -55,8 +57,8 @@ const PreviousButton = styled(Button)``;
 
 export default function SingleTaskMode(props: {
     todos : Todo[],
-    setDone : (id: number) => void}){
-
+    setDone : (id: number) => void})
+{
     const [index, setindex] = useState(0);
 
     let history = useHistory();

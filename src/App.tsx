@@ -8,9 +8,8 @@ import SingleTaskMode from './components/SingleTaskMode';
 import ListMode from "./components/ListMode";
 import {Todo} from './types'
 import { connect } from "react-redux";
-import { addTodo, deleteTodo, setTodos } from "./redux/actions";
-
-const prefix = 'http://localhost:4000';
+import { setTodos, addTodo, deleteTodo, loadTodos } from "./redux/actions";
+import {prefix} from "./prefix";
 
 const maxOrder = <T, >(arr: readonly T[], func: (element: T) => number): T => {
     let check = 0;
@@ -26,18 +25,16 @@ const maxOrder = <T, >(arr: readonly T[], func: (element: T) => number): T => {
 
 function App(props: {
     todos: Todo[],
-    addTodo: (data: string, checked: boolean, id: number, order: number) => void,
     deleteTodo: (id: number) => void,
-    setTodos: (todos: Todo[]) => void
+    setTodos: (todos: Todo[]) => void,
+    addTodo: (data: string, checked: boolean, id: number, order: number) => void,
+    loadTodos: () => void
+
 }) {
-    const {todos, setTodos, addTodo, deleteTodo: deleteFromStore } = props;
+    const {todos, setTodos, addTodo, deleteTodo, loadTodos} = props;
 
     useEffect(() => {
-        fetch(prefix + '/api/v1/todos')
-            .then(response => response.json())
-            .then(todos => {
-                setTodos(todos);
-            })
+        loadTodos()
     }, []);
 
     const addNewTodo = (text: string) => {
@@ -45,19 +42,7 @@ function App(props: {
         if (todos.length > 0) {
             order = maxOrder<Todo>(todos, el => el.order).order + 1
         }
-        fetch(prefix + '/api/v1/todos', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({data: text, checked: false, id: Math.random(), order: order})
-        });
         addTodo(text, false, Math.random(), order);
-    };
-
-    const deleteTodo = (id: number) => {
-        fetch(prefix + '/api/v1/todos/' + id, {
-            method: 'DELETE'
-        });
-        deleteFromStore(id);
     };
 
     const onCheckboxChange = (todoId: number) =>
@@ -113,5 +98,5 @@ function App(props: {
 
 export default connect(
     (state: any) => ({ todos: state.todos }),
-    { addTodo, deleteTodo, setTodos }
+    { setTodos, addTodo, deleteTodo, loadTodos }
 )(App);

@@ -9,6 +9,7 @@ const WrapperTimer = styled.div`
     margin-top: 40px;
     height: 26px;
     font-size: 18px;
+    color: #07635C;
 `;
 
 const Timer = styled.div`
@@ -22,6 +23,7 @@ const Timer = styled.div`
 const Button = styled.button`
     font-size: 18px;
     font-family: 'Cousine', monospace;
+    color: #07635C;
 `;
 
 const StartButton = styled(Button)`

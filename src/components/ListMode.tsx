@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
-import { Todo } from '../types'
+import { Todo } from '../types';
 import TodoItem from "./TodoItem";
+import { prefix } from '../prefix';
 
-const prefix = 'http://localhost:4000';
 
 const Button = styled.button`
     font-size: 18px;
