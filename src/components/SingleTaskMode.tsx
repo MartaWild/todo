@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components'
-import {useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Todo } from '../types';
 import Stopwatch from "./Stopwatch";
 
@@ -63,11 +63,11 @@ export default function SingleTaskMode(props: {
 
     let history = useHistory();
     const handler = () => {
-        history.replace('/')
+        history.replace('/list')
     };
 
     const getIncompleteTodos = () =>{
-        return props.todos.filter(todo => todo.checked == false);
+        return props.todos.filter(todo => !todo.checked);
     };
 
     const incompleteTodos = getIncompleteTodos();

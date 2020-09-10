@@ -9,7 +9,7 @@ const db = new sqlite.Database('todos.sqlite');
 //выполняется до других действий c db
 db.serialize(() => {
     db.run('CREATE TABLE IF NOT EXISTS todos (id INTEGER, checked BOOLEAN, data TEXT, item_order INTEGER)');
-
+    db.run('CREATE TABLE IF NOT EXISTS users (id_user INTEGER, login TEXT, password_hash TEXT)');
 });
 
 app.use(express.static('build'));

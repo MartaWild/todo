@@ -10,6 +10,7 @@ import {Todo} from './types'
 import { connect } from "react-redux";
 import { setTodos, addTodo, deleteTodo, loadTodos } from "./redux/actions";
 import {prefix} from "./prefix";
+import AuthForm from "./components/Auth-form";
 
 const maxOrder = <T, >(arr: readonly T[], func: (element: T) => number): T => {
     let check = 0;
@@ -81,7 +82,7 @@ function App(props: {
         <div className="App">
             <Router basename={window.location.pathname || ''}>
                 <Switch>
-                    <Route exact path='/' render={() =>
+                    <Route exact path='/list' render={() =>
                         <ListMode todos={todos}
                                   addNewTodo={addNewTodo}
                                   deleteTodo={deleteTodo}
@@ -89,6 +90,7 @@ function App(props: {
                                   setTodos={setTodos}
                         />}/>
                     <Route exact path='/single' render={() => <SingleTaskMode todos={todos} setDone={setDone}/>}/>
+                    <Route exact path='/' render={() => <AuthForm/>}/>
                 </Switch>
             </Router>
         </div>
