@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const sqlite = require('sqlite3').verbose();
+const bcrypt = require('bcryptjs');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
 const app = express();
 const db = new sqlite.Database('todos.sqlite');
@@ -12,11 +15,19 @@ db.serialize(() => {
     db.run('CREATE TABLE IF NOT EXISTS users (id_user INTEGER, login TEXT, password_hash TEXT)');
 });
 
+app.use(cors({origin: 'http://localhost:3000', credentials: true }));
+app.use(cookieParser());
+app.use(session({
+    secret: 'hungary cat',
+    cookie: {
+    }
+}));
 app.use(express.static('build'));
 app.use(bodyParser.json());
-app.use(cors());
+
 
 app.get('/api/v1/todos', (request, response) => {
+    console.log(request.session.userId, JSON.stringify(request.cookies) );
     db.all('SELECT * FROM todos ORDER BY item_order', (err, rows) => {
         const todos = rows.map(r => ({
             data: r.data,
@@ -47,6 +58,51 @@ app.post('/api/v1/todos', (request, response) => {
         statement.finalize();
     });
 });
+
+app.post('/api/v1/users', (request, response) => {
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(request.body.password, salt);
+    db.serialize(() =>{
+        const statement = db.prepare('INSERT INTO users (login, password_hash, id_user) VALUES (?, ?, ?)');
+        statement.run(
+            request.body.login,
+            hash,
+            Math.random(),
+            err => {
+                if (err) {
+                    response.sendStatus(500)
+                } else {
+                    response.sendStatus(201)
+                }
+            }
+        );
+        statement.finalize();
+    });
+});
+
+app.post('/api/v1/login', (request, response) => {
+    const statement = db.prepare('SELECT * FROM users WHERE login = ?');
+    statement.get(
+        request.body.login,
+        (err, row) => {
+        if(err){
+            response.sendStatus(500);
+            return;
+        }
+        if (!row){
+            response.sendStatus(404);
+            return;
+        }
+        if (bcrypt.compareSync(request.body.password, row.password_hash)){
+            request.session.userId = row.id_user;
+            response.sendStatus(200);
+        } else {
+            response.sendStatus(400);
+        }
+    });
+    statement.finalize();
+});
+
 
 app.delete('/api/v1/todos/:id', (req, res) => {
     db.serialize(() => {

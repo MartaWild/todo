@@ -33,7 +33,8 @@ export const addTodo = (data: string, checked: boolean, id: number, order: numbe
         fetch(prefix + '/api/v1/todos', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({data, checked: false, id: Math.random(), order})
+            body: JSON.stringify({data, checked: false, id: Math.random(), order}),
+            credentials: 'include'
         });
         dispatch(addTodoToStore(data, false, Math.random(), order));
     }
@@ -42,7 +43,8 @@ export const addTodo = (data: string, checked: boolean, id: number, order: numbe
 export const deleteTodo = (id: number) => {
     return (dispatch: Dispatch) => {
         fetch(prefix + '/api/v1/todos/' + id, {
-            method: 'DELETE'
+            method: 'DELETE',
+            credentials: 'include'
         });
         dispatch(deleteTodoFromStore(id))
     }
@@ -50,7 +52,7 @@ export const deleteTodo = (id: number) => {
 
 export const loadTodos = () => {
     return (dispatch: Dispatch) =>{
-        fetch(prefix + '/api/v1/todos')
+        fetch(prefix + '/api/v1/todos',{credentials: 'include'})
             .then(response => response.json())
             .then(todos => {
                 dispatch(setTodos(todos));

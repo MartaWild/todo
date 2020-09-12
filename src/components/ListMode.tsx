@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
 import { Todo } from '../types';
 import TodoItem from "./TodoItem";
 import { prefix } from '../prefix';
+import { connect } from "react-redux";
+import { loadTodos } from "../redux/actions";
 
 
 const Button = styled.button`
@@ -69,13 +71,21 @@ const year = today.getFullYear();
 const weekDay = today.toLocaleString('default', { weekday: 'short' });
 const fullDate = weekDay + ', ' + date + ' ' +  month + ' ' + year;
 
-export default function ListMode(props: {
+type ListModeOwnProps = {
     todos: Todo[],
     addNewTodo: (text: string) => void,
     deleteTodo: (id: number) => void,
     onCheckboxChange: (id: number) => (event: React.ChangeEvent<HTMLInputElement>) => void,
     setTodos: (todos: Todo[]) => void
+}
+
+function ListMode(props: ListModeOwnProps & {
+    loadTodos: () => void
 }) {
+
+    useEffect(() => {
+        props.loadTodos()
+    }, []);
 
     let history = useHistory();
     const handler = () => {
@@ -156,3 +166,8 @@ export default function ListMode(props: {
         </Wrapper>
     );
 }
+
+export default connect(
+    (state: any, ownProps: ListModeOwnProps) => ({ todos: state.todos, ...ownProps }),
+    { loadTodos }
+)(ListMode);

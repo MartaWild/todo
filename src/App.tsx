@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect } from 'react';
 import {
     BrowserRouter as Router,
     Switch,
@@ -6,10 +6,10 @@ import {
 } from "react-router-dom";
 import SingleTaskMode from './components/SingleTaskMode';
 import ListMode from "./components/ListMode";
-import {Todo} from './types'
+import { Todo } from './types'
 import { connect } from "react-redux";
 import { setTodos, addTodo, deleteTodo, loadTodos } from "./redux/actions";
-import {prefix} from "./prefix";
+import { prefix } from "./prefix";
 import AuthForm from "./components/Auth-form";
 
 const maxOrder = <T, >(arr: readonly T[], func: (element: T) => number): T => {
@@ -34,9 +34,6 @@ function App(props: {
 }) {
     const {todos, setTodos, addTodo, deleteTodo, loadTodos} = props;
 
-    useEffect(() => {
-        loadTodos()
-    }, []);
 
     const addNewTodo = (text: string) => {
         let order = 0;
