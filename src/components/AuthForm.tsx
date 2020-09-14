@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { prefix } from "../prefix";
+import { loadTodos } from "../redux/actions";
+import { connect } from "react-redux";
 
 const Wrapper = styled.div`
     margin-left: auto;
@@ -56,15 +58,11 @@ const LoginButton = styled.button`
     color: #07635C;
 `;
 
-export default function AuthForm(){
+function AuthForm(props: {loadTodos: () => void}){
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
 
-
     let history = useHistory();
-    const handler = () => {
-        history.replace('/list')
-    };
 
     const registration = (login: string, password: string) => {
         fetch(prefix + '/api/v1/users', {
@@ -83,12 +81,12 @@ export default function AuthForm(){
             body: JSON.stringify({login, password}),
             credentials: 'include'
         }).then( (res) => {
-            if(res.status >= 200 && res.status < 300){
-                history.replace('/list')
+            if(res.ok){
+                props.loadTodos();
+                history.replace('/list');
             } else {
                 alert('Неправильный логин или пароль')
             }
-
         });
     };
 
@@ -111,3 +109,8 @@ export default function AuthForm(){
         </Wrapper>
     )
 }
+
+export default connect(
+    (state: any) => ({ todos: state.todos }),
+    { loadTodos }
+)(AuthForm);

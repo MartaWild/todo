@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
@@ -6,8 +6,7 @@ import { Todo } from '../types';
 import TodoItem from "./TodoItem";
 import { prefix } from '../prefix';
 import { connect } from "react-redux";
-import { loadTodos } from "../redux/actions";
-
+import {addTodo, deleteTodo, loadTodos, setTodos} from "../redux/actions";
 
 const Button = styled.button`
     font-size: 18px;
@@ -57,6 +56,19 @@ const TodayDate = styled.div`
     margin: 5% 0 3% 0;
 `;
 
+const HeaderWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+`;
+
+const LogOutButton =styled(Button)`
+    height: 25px;
+    margin: 5% 0 3% 0;
+`;
+
+
 const reorder = (list: Todo[], startIndex: number, endIndex: number) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
@@ -71,21 +83,51 @@ const year = today.getFullYear();
 const weekDay = today.toLocaleString('default', { weekday: 'short' });
 const fullDate = weekDay + ', ' + date + ' ' +  month + ' ' + year;
 
-type ListModeOwnProps = {
+const maxOrder = <T, >(arr: readonly T[], func: (element: T) => number): T => {
+    let check = 0;
+    let theMaxOrder: T = arr[0];
+    for (let i = 0; i < arr.length; i++) {
+        if (check < func(arr[i])) {
+            check = func(arr[i]);
+            theMaxOrder = arr[i];
+        }
+    }
+    return theMaxOrder
+};
+
+function ListMode(props: {
     todos: Todo[],
-    addNewTodo: (text: string) => void,
     deleteTodo: (id: number) => void,
-    onCheckboxChange: (id: number) => (event: React.ChangeEvent<HTMLInputElement>) => void,
-    setTodos: (todos: Todo[]) => void
-}
-
-function ListMode(props: ListModeOwnProps & {
+    setTodos: (todos: Todo[]) => void,
+    addTodo: (data: string, checked: boolean, id: number, order: number) => void,
     loadTodos: () => void
-}) {
+}){
+    const {todos, setTodos, addTodo, deleteTodo, } = props;
 
-    useEffect(() => {
-        props.loadTodos()
-    }, []);
+    const addNewTodo = (text: string) => {
+        let order = 0;
+        if (todos.length > 0) {
+            order = maxOrder<Todo>(todos, el => el.order).order + 1
+        }
+        addTodo(text, false, Math.random(), order);
+    };
+
+    const onCheckboxChange = (todoId: number) =>
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            setTodos(todos.map(i => {
+                if (i.id === todoId) {
+                    fetch(prefix + '/api/v1/todos/' + todoId, {
+                        method: 'PUT',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({data: i.data, checked: !i.checked, id: i.id, order: i.order}),
+                        credentials: 'include'
+                    });
+                    return {data: i.data, checked: event.target.checked, id: i.id, order: i.order};
+                } else {
+                    return i;
+                }
+            }));
+        };
 
     let history = useHistory();
     const handler = () => {
@@ -96,7 +138,7 @@ function ListMode(props: ListModeOwnProps & {
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
         if (event.key === 'Enter') {
-            props.addNewTodo(inputValue); setValue('')
+            addNewTodo(inputValue); setValue('')
         }
     };
 
@@ -111,7 +153,7 @@ function ListMode(props: ListModeOwnProps & {
             result.destination.index
         );
 
-        props.setTodos(items);
+        setTodos(items);
         for(let i = 0; i < items.length; i++){
             fetch(prefix + '/api/v1/todos/' + items[i].id, {
                 method: 'PUT',
@@ -120,16 +162,34 @@ function ListMode(props: ListModeOwnProps & {
                         data: items[i].data,
                         checked: items[i].checked, id: items[i].id,
                         order: items[i].order
-                })
+                }),
+                credentials: 'include'
             });
         }
     };
 
+    const logout = () => {
+        fetch(prefix + '/api/v1/logout/', {
+            method: 'PUT',
+            headers: {'Content-Type':'application/json'},
+            credentials: 'include'
+        }).then(res =>{
+            if(res.ok){
+                history.replace('/');
+            }
+        })
+    };
+
     return (
         <Wrapper>
-            <TodayDate>
-                {fullDate}
-            </TodayDate>
+            <HeaderWrapper>
+                <TodayDate>
+                    {fullDate}
+                </TodayDate>
+                <LogOutButton onClick={logout}>
+                    Выход
+                </LogOutButton>
+            </HeaderWrapper>
             <WrapperAddTodo>
                 <InputTodo type="text"
                            onChange={(event) => setValue(event.target.value)}
@@ -137,7 +197,7 @@ function ListMode(props: ListModeOwnProps & {
                            value={inputValue}
                            autoFocus
                 />
-                <AddTodo onClick={() => {props.addNewTodo(inputValue); setValue('')}}>Добавить</AddTodo>
+                <AddTodo onClick={() => {addNewTodo(inputValue); setValue('')}}>Добавить</AddTodo>
                 <SingleTaskModeButton onClick={handler}>Одно задание</SingleTaskModeButton>
             </WrapperAddTodo>
             <WrapperControls>
@@ -152,9 +212,9 @@ function ListMode(props: ListModeOwnProps & {
                             {props.todos.map((item, index) => (
                                 <TodoItem item={item}
                                           index={index}
-                                          addNewTodo={props.addNewTodo}
-                                          deleteTodo={props.deleteTodo}
-                                          onCheckboxChange={props.onCheckboxChange}
+                                          addNewTodo={addNewTodo}
+                                          deleteTodo={deleteTodo}
+                                          onCheckboxChange={onCheckboxChange}
                                           key={item.id}
                                 />
 
@@ -168,6 +228,6 @@ function ListMode(props: ListModeOwnProps & {
 }
 
 export default connect(
-    (state: any, ownProps: ListModeOwnProps) => ({ todos: state.todos, ...ownProps }),
-    { loadTodos }
+    (state: any) => ({ todos: state.todos }),
+    { setTodos, addTodo, deleteTodo, loadTodos }
 )(ListMode);

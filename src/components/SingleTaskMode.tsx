@@ -3,6 +3,9 @@ import styled from 'styled-components'
 import { useHistory } from "react-router-dom";
 import { Todo } from '../types';
 import Stopwatch from "./Stopwatch";
+import { prefix } from "../prefix";
+import { connect } from "react-redux";
+import {addTodo, deleteTodo, loadTodos, setTodos} from "../redux/actions";
 
 const Button = styled.button`
     font-size: 18px;
@@ -55,11 +58,28 @@ const InfoButton = styled(Button)``;
 
 const PreviousButton = styled(Button)``;
 
-export default function SingleTaskMode(props: {
-    todos : Todo[],
-    setDone : (id: number) => void})
-{
+function SingleTaskMode(props: {
+    todos: Todo[],
+    setTodos: (todos: Todo[]) => void,
+}){
     const [index, setindex] = useState(0);
+    const {todos, setTodos } = props;
+
+    const setDone = (todoId: number) => {
+        setTodos(todos.map(i => {
+                if (i.id === todoId) {
+                    fetch(prefix + '/api/v1/todos/' + todoId, {
+                        method: 'PUT',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({data: i.data, checked: true, id: i.id, order: i.order})
+                    });
+                    return {data: i.data, checked: true, id: i.id, order: i.order};
+                } else {
+                    return i;
+                }
+            }
+        ))
+    };
 
     let history = useHistory();
     const handler = () => {
@@ -67,7 +87,7 @@ export default function SingleTaskMode(props: {
     };
 
     const getIncompleteTodos = () =>{
-        return props.todos.filter(todo => !todo.checked);
+        return todos.filter(todo => !todo.checked);
     };
 
     const incompleteTodos = getIncompleteTodos();
@@ -88,7 +108,7 @@ export default function SingleTaskMode(props: {
 
     const handleCompleteButton = () => {
         if (incompleteTodos.length > 0){
-            props.setDone(incompleteTodos[newIndex].id);
+            setDone(incompleteTodos[newIndex].id);
             nextTodo();
         }
     };
@@ -108,3 +128,8 @@ export default function SingleTaskMode(props: {
         </Wrapper>
     )
 }
+
+export default connect(
+    (state: any) => ({ todos: state.todos }),
+    { setTodos }
+)(SingleTaskMode);

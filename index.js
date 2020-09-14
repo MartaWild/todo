@@ -19,15 +19,16 @@ app.use(cors({origin: 'http://localhost:3000', credentials: true }));
 app.use(cookieParser());
 app.use(session({
     secret: 'hungary cat',
-    cookie: {
-    }
+    cookie: {}
 }));
 app.use(express.static('build'));
 app.use(bodyParser.json());
 
-
 app.get('/api/v1/todos', (request, response) => {
-    console.log(request.session.userId, JSON.stringify(request.cookies) );
+    if (request.session.userId == null){
+        response.sendStatus(403);
+        return;
+    }
     db.all('SELECT * FROM todos ORDER BY item_order', (err, rows) => {
         const todos = rows.map(r => ({
             data: r.data,
@@ -152,6 +153,11 @@ app.put('/api/v1/todos/:id', (req, res) => {
                 }
             })
     })
+});
+
+app.put('/api/v1/logout/', (req, res) => {
+    req.session.destroy();
+    res.sendStatus(200);
 });
 
 app.listen(4000, ()=> console.log('Adios!'));

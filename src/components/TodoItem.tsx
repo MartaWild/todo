@@ -46,7 +46,6 @@ export default function TodoItem (props: {
     item: Todo
     index: number
 }){
-
     const {item, index} = props;
 
     return (
