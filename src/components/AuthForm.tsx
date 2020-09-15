@@ -20,43 +20,85 @@ const Wrapper = styled.div`
 const FormWindow = styled.div`
     display: flex;
     flex-direction: column;
+    background: #D2FAF7;
+    border-radius: 26px;
+    width: 438px;
+    height: 308px;
+    margin-left: auto;
+    margin-right: auto;    
+    align-items: center;
+    padding: 30px;
+    justify-content: center;
+    
 `;
 
 const InputWrapper = styled.div`
     margin-bottom: 20px;
+    display: inline-block;
+    width: 70%;        
 `;
 
 const LoginInput = styled.input`
-    width: 50%;
+    padding: 10px;
+    width: 100%;
     font-size: 18px;
     font-family: 'Cousine', monospace;
     margin-right: 10px;
     color: #07635C;
-    margin-bottom: 10px;
-`;
+    margin-bottom: 30px;
+    border: none;
+    box-sizing: border-box;
+    border-radius: 2px;    
+ `;
 
 const PasswordInput = styled.input`
-    width: 50%;
+    padding: 10px;
+    width: 100%;
     font-size: 18px;
     font-family: 'Cousine', monospace;
     margin-right: 10px;
     color: #07635C;
+    border: none;
+    box-sizing: border-box;
+    border-radius: 2px;
 `;
 
-const ButtonWrapper = styled.div``;
+const ButtonWrapper = styled.div`
+    margin-top: 30px;
+
+`;
 
 const RegisterButton = styled.button`
     font-size: 18px;
     font-family: 'Cousine', monospace;
     color: #07635C;
-    margin-right: 10px;
+    margin-right: 70px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    height: 40px;
+    padding: 10px;
 `;
 
 const LoginButton = styled.button`
     font-size: 18px;
     font-family: 'Cousine', monospace;
-    color: #07635C;
+    color: #ffffff;
+    background: #33CEC3;
+    border-radius: 4px;
+    height: 40px;
+    width: 100px;
+    cursor:pointer;
+    border: none;
 `;
+const LoginText = styled.div`
+    margin-bottom: 10px;
+`;
+
+const PasswordText = styled.div`
+    margin-bottom: 10px;
+`;
+
 
 function AuthForm(props: {loadTodos: () => void}){
     const [login, setLogin] = useState('');
@@ -94,12 +136,14 @@ function AuthForm(props: {loadTodos: () => void}){
         <Wrapper>
             <FormWindow>
                 <InputWrapper>
-                    <LoginInput type='text' value={login} onChange={(event) => setLogin(event.target.value)}>
-
-                    </LoginInput>
-                    <PasswordInput type='password' value={password} onChange={(event) => setPassword(event.target.value)}>
-
-                    </PasswordInput>
+                    <LoginText>
+                        Логин
+                    </LoginText>
+                    <LoginInput type='text' value={login} onChange={(event) => setLogin(event.target.value)} />
+                    <PasswordText>
+                        Пароль
+                    </PasswordText>
+                    <PasswordInput type='password' value={password} onChange={(event) => setPassword(event.target.value)} />
                 </InputWrapper>
                 <ButtonWrapper>
                     <RegisterButton onClick={() => registration(login, password)}> Регистрация </RegisterButton>

@@ -11,13 +11,19 @@ import {addTodo, deleteTodo, loadTodos, setTodos} from "../redux/actions";
 const Button = styled.button`
     font-size: 18px;
     font-family: 'Cousine', monospace;
-    color: #07635C;
+    color: #ffffff;
+    background: #33CEC3;
+    border-radius: 4px;
+    height: 40px;
+    cursor:pointer;
+    border: none;
+    cursor: pointer;
 `;
 
 const Wrapper = styled.div`
     margin-left: auto;
     margin-right: auto;    
-    margin-top: 5%;
+    margin-top: 2%;
     padding: 0;
     width: 80vw;    
     font-size: 18px;
@@ -39,11 +45,15 @@ const WrapperControls = styled.div`
 `;
 
 const InputTodo = styled.input`
-    width: 50%;
+    width: 70%;
     font-size: 18px;
     font-family: 'Cousine', monospace;
     margin-right: 10px;
     color: #07635C;
+    box-sizing: border-box;
+    border-radius: 2px;
+    border: 1px solid #13988F;
+    padding: 10px;
 `;
 
 const AddTodo = styled(Button)`
@@ -60,12 +70,12 @@ const HeaderWrapper = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-
 `;
 
-const LogOutButton =styled(Button)`
-    height: 25px;
+const LogOutButton = styled(Button)`
     margin: 5% 0 3% 0;
+    background: none;
+    color: #07635C;
 `;
 
 
