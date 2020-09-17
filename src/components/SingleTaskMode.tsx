@@ -10,7 +10,13 @@ import {addTodo, deleteTodo, loadTodos, setTodos} from "../redux/actions";
 const Button = styled.button`
     font-size: 18px;
     font-family: 'Cousine', monospace;
-    color: #07635C;
+    color: #ffffff;
+    background: #33CEC3;
+    border-radius: 4px;
+    height: 40px;
+    cursor:pointer;
+    border: none;
+    padding: 5px 20px 5px 20px;
 `;
 
 const Wrapper = styled.div`
@@ -18,45 +24,78 @@ const Wrapper = styled.div`
     margin-right: auto;    
     margin-top: 5%;
     padding: 0;
-    width: 80vw;   
+    width: 50vw;   
     font-size: 18px;
     font-family: 'Cousine', monospace;
     color: #07635C;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 `;
 
 const WrapperTodo = styled.div`
     display: flex;
-    flex-direction: row; 
-    justify-content: space-between;
-    margin-bottom: 50px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 35px;
+    min-height: 250px;
 `;
 
 const TodoText = styled.li`
-      list-style-type: none;
-      margin-right: 10px;
-      width: 80%;
-      text-align: center;
+    list-style-type: none;
+    margin-right: 10px;
+    width: 80%;
+    text-align: center;
+    font-size: 25px;
 `;
-
-const Time = styled.div``;
 
 const WrapperButtons = styled.div`
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
+    width: 100%;
 `;
 
-const DeleteButton = styled(Button)``;
+const CompleteButton = styled(Button)`
+    `;
 
-const CompleteButton = styled(Button)``;
+const NextButton = styled(Button)`
+    width: 100px;
+    font-size: 25px;
+    color: #33CEC3;
+    background: none;
+    border: none;
+`;
 
-const NextButton = styled(Button)``;
+const ListModeButton = styled(Button)` 
+    align-self: flex-start;  
+    font-size: 18px; 
+    background: none;
+    border: none;
+    color: #07635C;
+    padding: 0;
+`;
 
-const ListModeButton = styled(Button)``;
+const PreviousButton = styled(Button)`
+    width: 100px;    
+    font-size: 25px;
+    color: #33CEC3;
+    background: none;
+    border: none;
+`;
 
-const InfoButton = styled(Button)``;
+const StopwatchWrapper = styled.div`
+    width: 50%;
+    align-self: flex-start;
+`;
 
-const PreviousButton = styled(Button)``;
+const Line = styled.hr`
+    border: 1px solid #33CEC3;
+    width: 100%;
+    margin-bottom: 50px;    
+`;
+
 
 function SingleTaskMode(props: {
     todos: Todo[],
@@ -83,7 +122,7 @@ function SingleTaskMode(props: {
 
     let history = useHistory();
     const handler = () => {
-        history.replace('/list')
+        history.replace('list')
     };
 
     const getIncompleteTodos = () =>{
@@ -118,13 +157,16 @@ function SingleTaskMode(props: {
             <WrapperTodo>
                 <TodoText>{incompleteTodos.length > 0 ? incompleteTodos[newIndex].data : "Нет заданий"}</TodoText>
             </WrapperTodo>
+            <Line />
             <WrapperButtons>
-                <PreviousButton onClick={previousTodo}>←</PreviousButton>
-                <CompleteButton onClick={handleCompleteButton}> Done! </CompleteButton>
-                <NextButton onClick={nextTodo}>→</NextButton>
+                <PreviousButton onClick={previousTodo}> 🠜 </PreviousButton>
+                <CompleteButton onClick={handleCompleteButton}> Выполненно! </CompleteButton>
+                <NextButton onClick={nextTodo}> 🠞 </NextButton>
             </WrapperButtons>
-            <Stopwatch />
-            <ListModeButton onClick={handler}>Весь список</ListModeButton>
+            <StopwatchWrapper>
+                <Stopwatch />
+            </StopwatchWrapper>
+            <ListModeButton onClick={handler}>К списку</ListModeButton>
         </Wrapper>
     )
 }

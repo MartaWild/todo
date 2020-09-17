@@ -29,25 +29,31 @@ app.get('/api/v1/todos', (request, response) => {
         response.sendStatus(403);
         return;
     }
-    db.all('SELECT * FROM todos ORDER BY item_order', (err, rows) => {
+    const statement = db.prepare('SELECT * FROM todos WHERE user_id = ? ORDER BY item_order');
+    statement.all(
+        request.session.userId,
+        (err, rows) => {
         const todos = rows.map(r => ({
             data: r.data,
             id: r.id,
             checked: r.checked,
-            order: r.item_order
+            order: r.item_order,
+            userId: r.user_id
         }));
         response.json(todos)
     });
 });
 
 app.post('/api/v1/todos', (request, response) => {
+
     db.serialize(() =>{
-        const statement = db.prepare('INSERT INTO todos (id, checked, data, item_order) VALUES (?, ?, ?, ?)');
+        const statement = db.prepare('INSERT INTO todos (id, checked, data, item_order, user_id) VALUES (?, ?, ?, ?, ?)');
         statement.run(
             request.body.id,
             request.body.checked,
             request.body.data,
             request.body.order,
+            request.session.userId,
             err => {
                 if (err) {
                     response.sendStatus(500)
@@ -108,6 +114,7 @@ app.post('/api/v1/login', (request, response) => {
 app.delete('/api/v1/todos/:id', (req, res) => {
     db.serialize(() => {
         const statement = db.prepare('DELETE FROM todos WHERE id=?');
+        console.log(req.params.id);
         statement.run(
             req.params.id,
             err => {

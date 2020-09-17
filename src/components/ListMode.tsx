@@ -6,7 +6,7 @@ import { Todo } from '../types';
 import TodoItem from "./TodoItem";
 import { prefix } from '../prefix';
 import { connect } from "react-redux";
-import {addTodo, deleteTodo, loadTodos, setTodos} from "../redux/actions";
+import {addTodo, deleteTodo, loadTodos, setTodos, resetStore} from "../redux/actions";
 
 const Button = styled.button`
     font-size: 18px;
@@ -17,7 +17,7 @@ const Button = styled.button`
     height: 40px;
     cursor:pointer;
     border: none;
-    cursor: pointer;
+    padding: 5px 20px 5px 20px;
 `;
 
 const Wrapper = styled.div`
@@ -51,9 +51,13 @@ const InputTodo = styled.input`
     margin-right: 10px;
     color: #07635C;
     box-sizing: border-box;
-    border-radius: 2px;
+    border-radius: 5px;
     border: 1px solid #13988F;
-    padding: 10px;
+    padding: 9px;
+    
+    &:focus {
+      outline: none;
+    }
 `;
 
 const AddTodo = styled(Button)`
@@ -64,6 +68,8 @@ const SingleTaskModeButton = styled(Button)``;
 
 const TodayDate = styled.div`
     margin: 5% 0 3% 0;
+    font-size: 20px;
+    font-weight: bold;
 `;
 
 const HeaderWrapper = styled.div`
@@ -76,6 +82,8 @@ const LogOutButton = styled(Button)`
     margin: 5% 0 3% 0;
     background: none;
     color: #07635C;
+    font-weight: bold;
+    font-size: 15px;
 `;
 
 
@@ -92,6 +100,7 @@ const month = today.toLocaleString('default', { month: 'short' });
 const year = today.getFullYear();
 const weekDay = today.toLocaleString('default', { weekday: 'short' });
 const fullDate = weekDay + ', ' + date + ' ' +  month + ' ' + year;
+
 
 const maxOrder = <T, >(arr: readonly T[], func: (element: T) => number): T => {
     let check = 0;
@@ -110,9 +119,10 @@ function ListMode(props: {
     deleteTodo: (id: number) => void,
     setTodos: (todos: Todo[]) => void,
     addTodo: (data: string, checked: boolean, id: number, order: number) => void,
-    loadTodos: () => void
+    loadTodos: () => void,
+    resetStore: () => void,
 }){
-    const {todos, setTodos, addTodo, deleteTodo, } = props;
+    const {todos, setTodos, addTodo, deleteTodo, resetStore} = props;
 
     const addNewTodo = (text: string) => {
         let order = 0;
@@ -139,9 +149,25 @@ function ListMode(props: {
             }));
         };
 
+    const onClickTodoText = (todoId: number) =>
+        setTodos(todos.map(i => {
+            if (i.id === todoId) {
+                fetch(prefix + '/api/v1/todos/' + todoId, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({data: i.data, checked: !i.checked, id: i.id, order: i.order}),
+                    credentials: 'include'
+                });
+                return {data: i.data, checked: !i.checked, id: i.id, order: i.order};
+            } else {
+                return i;
+            }
+        }));
+
+
     let history = useHistory();
     const handler = () => {
-        history.replace('/single')
+        history.replace('single')
     };
 
     const [inputValue, setValue] = useState('');
@@ -186,6 +212,7 @@ function ListMode(props: {
         }).then(res =>{
             if(res.ok){
                 history.replace('/');
+                resetStore();
             }
         })
     };
@@ -194,7 +221,7 @@ function ListMode(props: {
         <Wrapper>
             <HeaderWrapper>
                 <TodayDate>
-                    {fullDate}
+                    {fullDate.charAt(0).toUpperCase() + fullDate.slice(1)}
                 </TodayDate>
                 <LogOutButton onClick={logout}>
                     Выход
@@ -226,6 +253,7 @@ function ListMode(props: {
                                           deleteTodo={deleteTodo}
                                           onCheckboxChange={onCheckboxChange}
                                           key={item.id}
+                                          onClickTodoText={onClickTodoText}
                                 />
 
                             ))}
@@ -239,5 +267,5 @@ function ListMode(props: {
 
 export default connect(
     (state: any) => ({ todos: state.todos }),
-    { setTodos, addTodo, deleteTodo, loadTodos }
+    { setTodos, addTodo, deleteTodo, loadTodos, resetStore }
 )(ListMode);

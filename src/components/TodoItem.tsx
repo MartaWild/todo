@@ -16,7 +16,8 @@ const Button = styled.button`
 
 `;
 
-const ListItem = styled.div`
+const ListItem = styled.li`
+    list-style-type: none;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -27,10 +28,8 @@ const ListItem = styled.div`
 `;
 
 const Checkbox = styled.input`
-    transform: scale(1.5);
     color: #07635C;
     box-sizing: border-box;
-    border-radius: 2px;
     border: 1px solid #13988F;
     position: absolute;
     opacity: 0;
@@ -39,23 +38,20 @@ const Checkbox = styled.input`
     width: 0;
 `;
 
-const TodoText = styled.li`
-    list-style-type: none;
-    width: 50%;
+const TodoText = styled.div`
+    width: 100%;
     margin: 0;
     padding: 0;
-`;
-
-const Time = styled.input`
-    width: 7%;
-    font-size: 18px;
-    font-family: 'Cousine', monospace;
+    margin-left: 60px;
+    display: block;
 `;
 
 const NewCheckbox = styled.label`
     display: block;
     position: relative;
     cursor: pointer;
+    height: 25px;
+    width: 25px;
 `;
 
 const Checkmark = styled.span`
@@ -67,7 +63,7 @@ const Checkmark = styled.span`
     background: #FFFFFF;
     border: 1px solid #13988F;
     box-sizing: border-box;
-    border-radius: 2px;
+    border-radius: 5px;
     
     &:after{
         left: 8px;
@@ -84,21 +80,26 @@ const Checkmark = styled.span`
     
     input:checked ~ &:after{
         display: block;
-    }
-    
+    }    
+`;
+
+const TodoTextWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    width: 90%;    
 `;
 
 
 const Delete = styled(Button)``;
 
-const Slide = styled.div``;
 
 export default function TodoItem (props: {
     addNewTodo: (text: string) => void,
     deleteTodo: (id: number) => void,
     onCheckboxChange: (id: number) => (event: React.ChangeEvent<HTMLInputElement>) => void,
-    item: Todo
-    index: number
+    onClickTodoText: (id: number) => void
+    item: Todo,
+    index: number,
 }){
     const {item, index} = props;
 
@@ -110,15 +111,20 @@ export default function TodoItem (props: {
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                           style={provided.draggableProps.style}
+
                 >
-                    <NewCheckbox>
-                        <Checkbox type='checkbox' checked={item.checked}
-                                  onChange={props.onCheckboxChange(item.id)}
-                        />
-                        <Checkmark />
-                    </NewCheckbox>
-                    <TodoText style={item.checked ? {textDecoration: "line-through", textDecorationThickness: "2px"} : {}}> {item.data} </TodoText>
-                    <Delete onClick={() => props.deleteTodo(item.id)}>X</Delete>
+                    <TodoTextWrapper onClick={() => {props.onClickTodoText(item.id); }}>
+                        <NewCheckbox>
+                            <Checkbox type='checkbox' checked={item.checked}
+                                      onChange={props.onCheckboxChange(item.id)}
+                            />
+                            <Checkmark />
+                        </NewCheckbox>
+                        <TodoText style={item.checked ? {textDecoration: "line-through", textDecorationThickness: "2px"} : {}}>
+                            {item.data}
+                        </TodoText>
+                    </TodoTextWrapper>
+                        <Delete onClick={() => props.deleteTodo(item.id)}>X</Delete>
                 </ListItem>
             )}
         </Draggable>

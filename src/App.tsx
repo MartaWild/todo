@@ -1,10 +1,9 @@
 import React, {useEffect} from 'react';
 import {
-
     Switch,
-    Route, useHistory
+    Route,
+    useHistory
 } from "react-router-dom";
-import {createBrowserHistory} from 'history';
 import SingleTaskMode from './components/SingleTaskMode';
 import ListMode from "./components/ListMode";
 import AuthForm from "./components/AuthForm";
@@ -20,16 +19,18 @@ function App(props: { loadTodos: () => void }) {
         fetch(prefix + '/api/v1/todos', {credentials: 'include'})
             .then(res => {
                 if (res.ok) {
-                    history.replace('/list');
+                    console.log(window.location.pathname);
+                    if (window.location.pathname === '/'){
+                        history.replace('list');
+                    }
                     loadTodos();
                 }
             })
-    });
+    }, []);
 
     return (
         <Switch>
-            <Route exact path='/list' render={() =>
-                <ListMode/>}/>
+            <Route exact path='/list' render={() => <ListMode/>}/>
             <Route exact path='/single' render={() => <SingleTaskMode/>}/>
             <Route exact path='/' render={() => <AuthForm/>}/>
         </Switch>

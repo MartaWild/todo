@@ -1,4 +1,4 @@
-import { ADD_TODO_TO_STORE, DELETE_TODO_FROM_STORE, SET_TODOS } from "./actionTypes";
+import { ADD_TODO_TO_STORE, DELETE_TODO_FROM_STORE, SET_TODOS, RESET } from "./actionTypes";
 import {Todo} from "../types";
 import { prefix } from '../prefix';
 import {Dispatch} from "redux";
@@ -26,6 +26,11 @@ export const setTodos = (todos: Todo[]) => ({
         todos
     }
 
+});
+
+export const resetStore = () => ({
+    type: RESET,
+    payload: {}
 });
 
 export const addTodo = (data: string, checked: boolean, id: number, order: number) => {

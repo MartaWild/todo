@@ -5,7 +5,8 @@ const WrapperTimer = styled.div`
     display: flex;
     flex-direction: row; 
     justify-content: space-between;
-    margin-bottom: 10px;
+    align-items: center;
+    margin-bottom: 30px;
     margin-top: 40px;
     height: 26px;
     font-size: 18px;
@@ -17,21 +18,33 @@ const Timer = styled.div`
     height: 100%;
     flex-direction: column;
     justify-content: center;
-    font-size: 18px;
+    font-size: 19px;    
 `;
 
 const Button = styled.button`
     font-size: 18px;
     font-family: 'Cousine', monospace;
-    color: #07635C;
+    color: #ffffff;
+    background: #33CEC3;
+    border-radius: 4px;
+    height: 40px;
+    cursor:pointer;
+    border: none;
 `;
 
 const StartButton = styled(Button)`
-    height: 100%;
+    width: 100px;  
+    color: #33CEC3;
+    background: none;
+    border: none;
+    font-size: 22px;
 `;
 
 const ResetButton = styled(Button)`
-    height: 100%;
+    width: 100px;  
+    color: #07635C;
+    background: none;
+    border: none;
 `;
 
 
@@ -89,7 +102,7 @@ export default function StopWatch() {
              <Timer>
                 <Counter />
              </Timer>
-             <StartButton onClick={() => setIsRunning(!isRunning)}> ► </StartButton>
+             <StartButton onClick={() => setIsRunning(!isRunning)}> {isRunning ? '⏸' : '►'} </StartButton>
              <ResetButton onClick={() => {setIsRunning(false); setSec(0)}}> Сброс </ResetButton>
          </WrapperTimer>
      )

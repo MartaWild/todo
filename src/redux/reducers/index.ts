@@ -1,4 +1,4 @@
-import {ADD_TODO_TO_STORE, DELETE_TODO_FROM_STORE, SET_TODOS} from "../actionTypes";
+import {ADD_TODO_TO_STORE, DELETE_TODO_FROM_STORE, RESET, SET_TODOS} from "../actionTypes";
 import * as actions from "../actions";
 import { Todo } from '../../types';
 
@@ -31,6 +31,9 @@ export const rootReducer = (state = initialState, action: ActionType) => {
                 ...state,
                 todos: action.payload.todos
             };
+        }
+        case RESET: {
+            return initialState;
         }
         default: return state;
     }
