@@ -19,7 +19,6 @@ function App(props: { loadTodos: () => void }) {
         fetch(prefix + '/api/v1/todos', {credentials: 'include'})
             .then(res => {
                 if (res.ok) {
-                    console.log(window.location.pathname);
                     if (window.location.pathname === '/'){
                         history.replace('list');
                     }

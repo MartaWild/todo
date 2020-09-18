@@ -113,14 +113,16 @@ export default function TodoItem (props: {
                           style={provided.draggableProps.style}
 
                 >
-                    <TodoTextWrapper onClick={() => {props.onClickTodoText(item.id); }}>
-                        <NewCheckbox>
+                    <TodoTextWrapper>
+                        <NewCheckbox >
                             <Checkbox type='checkbox' checked={item.checked}
                                       onChange={props.onCheckboxChange(item.id)}
                             />
                             <Checkmark />
                         </NewCheckbox>
-                        <TodoText style={item.checked ? {textDecoration: "line-through", textDecorationThickness: "2px"} : {}}>
+                        <TodoText style={item.checked ? {textDecoration: "line-through", textDecorationThickness: "2px"} : {}}
+                                  onClick={() => props.onClickTodoText(item.id)}
+                        >
                             {item.data}
                         </TodoText>
                     </TodoTextWrapper>

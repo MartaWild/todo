@@ -33,15 +33,16 @@ export const resetStore = () => ({
     payload: {}
 });
 
-export const addTodo = (data: string, checked: boolean, id: number, order: number) => {
+export const addTodo = (data: string, checked: boolean, order: number) => {
     return (dispatch: Dispatch) => {
         fetch(prefix + '/api/v1/todos', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({data, checked: false, id: Math.random(), order}),
+            body: JSON.stringify({data, checked: false, order}),
             credentials: 'include'
-        });
-        dispatch(addTodoToStore(data, false, Math.random(), order));
+        })
+            .then(res => res.json())
+            .then(obj => dispatch(addTodoToStore(data, false, obj.id, order)))
     }
 };
 
@@ -63,4 +64,4 @@ export const loadTodos = () => {
                 dispatch(setTodos(todos));
             })
     }
-}
+};

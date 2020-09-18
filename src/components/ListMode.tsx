@@ -118,7 +118,7 @@ function ListMode(props: {
     todos: Todo[],
     deleteTodo: (id: number) => void,
     setTodos: (todos: Todo[]) => void,
-    addTodo: (data: string, checked: boolean, id: number, order: number) => void,
+    addTodo: (data: string, checked: boolean, order: number) => void,
     loadTodos: () => void,
     resetStore: () => void,
 }){
@@ -129,7 +129,7 @@ function ListMode(props: {
         if (todos.length > 0) {
             order = maxOrder<Todo>(todos, el => el.order).order + 1
         }
-        addTodo(text, false, Math.random(), order);
+        addTodo(text, false, order);
     };
 
     const onCheckboxChange = (todoId: number) =>
