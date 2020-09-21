@@ -44,11 +44,8 @@ const PasswordInput = styled.input`
 `;
 
 const ButtonWrapper = styled.div`
-    margin-top: 10px;
-
+    margin-top: 12px;
 `;
-
-
 
 const LoginButton = styled.button`
     font-size: 18px;

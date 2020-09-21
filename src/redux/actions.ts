@@ -1,7 +1,12 @@
-import { ADD_TODO_TO_STORE, DELETE_TODO_FROM_STORE, SET_TODOS, RESET } from "./actionTypes";
+import { ADD_TODO_TO_STORE, DELETE_TODO_FROM_STORE, SET_TODOS, RESET, START_TODOS_LOADING } from "./actionTypes";
 import {Todo} from "../types";
 import { prefix } from '../prefix';
 import {Dispatch} from "redux";
+
+export const startTodosLoading = () =>({
+    type: START_TODOS_LOADING,
+    payload: {}
+});
 
 export const addTodoToStore = (data: string, checked: boolean, id: number, order: number) => ({
     type: ADD_TODO_TO_STORE,
@@ -58,6 +63,7 @@ export const deleteTodo = (id: number) => {
 
 export const loadTodos = () => {
     return (dispatch: Dispatch) =>{
+        dispatch(startTodosLoading());
         fetch(prefix + '/api/v1/todos',{credentials: 'include'})
             .then(response => response.json())
             .then(todos => {

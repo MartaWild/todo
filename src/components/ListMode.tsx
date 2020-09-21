@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, {keyframes} from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
 import { Todo } from '../types';
@@ -25,7 +25,7 @@ const Wrapper = styled.div`
     margin-right: auto;    
     margin-top: 2%;
     padding: 0;
-    width: 80vw;    
+    width: 60vw;    
     font-size: 18px;
     font-family: 'Cousine', monospace;
     user-select: none;
@@ -41,11 +41,9 @@ const WrapperAddTodo = styled.div`
     margin-bottom: 4%;
 `;
 
-const WrapperControls = styled.div`
-`;
 
 const InputTodo = styled.input`
-    width: 70%;
+    width: 61%;
     font-size: 18px;
     font-family: 'Cousine', monospace;
     margin-right: 10px;
@@ -79,11 +77,26 @@ const HeaderWrapper = styled.div`
 `;
 
 const LogOutButton = styled(Button)`
-    margin: 5% 0 3% 0;
+    margin: 5% 3% 3% 0;
     background: none;
     color: #07635C;
     font-weight: bold;
     font-size: 15px;
+`;
+
+const spin = keyframes`
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }`;
+
+const Loader = styled.div`
+    margin-left: auto;
+    margin-right: auto;    
+    border: 16px solid #f3f3f3; 
+    border-top: 16px solid #13988F; 
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: ${spin} 2s linear infinite;
 `;
 
 
@@ -100,7 +113,6 @@ const month = today.toLocaleString('default', { month: 'short' });
 const year = today.getFullYear();
 const weekDay = today.toLocaleString('default', { weekday: 'short' });
 const fullDate = weekDay + ', ' + date + ' ' +  month + ' ' + year;
-
 
 const maxOrder = <T, >(arr: readonly T[], func: (element: T) => number): T => {
     let check = 0;
@@ -121,8 +133,9 @@ function ListMode(props: {
     addTodo: (data: string, checked: boolean, order: number) => void,
     loadTodos: () => void,
     resetStore: () => void,
+    isLoading: boolean
 }){
-    const {todos, setTodos, addTodo, deleteTodo, resetStore} = props;
+    const {todos, setTodos, addTodo, deleteTodo, resetStore, isLoading} = props;
 
     const addNewTodo = (text: string) => {
         let order = 0;
@@ -237,35 +250,33 @@ function ListMode(props: {
                 <AddTodo onClick={() => {addNewTodo(inputValue); setValue('')}}>Добавить</AddTodo>
                 <SingleTaskModeButton onClick={handler}>Одно задание</SingleTaskModeButton>
             </WrapperAddTodo>
-            <WrapperControls>
-
-            </WrapperControls>
-            <DragDropContext onDragEnd={onDragEnd} >
-                <Droppable droppableId="droppable">
-                    {(provided, snapshot) =>(
-                        <List {...provided.droppableProps}
-                              ref={provided.innerRef}
-                        >
-                            {props.todos.map((item, index) => (
-                                <TodoItem item={item}
-                                          index={index}
-                                          addNewTodo={addNewTodo}
-                                          deleteTodo={deleteTodo}
-                                          onCheckboxChange={onCheckboxChange}
-                                          key={item.id}
-                                          onClickTodoText={onClickTodoText}
-                                />
-
-                            ))}
-                        </List>
-                    )}
-                </Droppable>
-            </DragDropContext>
+            {isLoading ? <Loader /> :
+                <DragDropContext onDragEnd={onDragEnd} >
+                    <Droppable droppableId="droppable">
+                        {(provided, snapshot) =>(
+                            <List {...provided.droppableProps}
+                                  ref={provided.innerRef}
+                            >
+                                {props.todos.map((item, index) => (
+                                    <TodoItem item={item}
+                                              index={index}
+                                              addNewTodo={addNewTodo}
+                                              deleteTodo={deleteTodo}
+                                              onCheckboxChange={onCheckboxChange}
+                                              key={item.id}
+                                              onClickTodoText={onClickTodoText}
+                                    />
+                                ))}
+                            </List>
+                        )}
+                    </Droppable>
+                </DragDropContext>
+            }
         </Wrapper>
     );
 }
 
 export default connect(
-    (state: any) => ({ todos: state.todos }),
+    (state: any) => ({ todos: state.todos, isLoading: state.isLoading }),
     { setTodos, addTodo, deleteTodo, loadTodos, resetStore }
 )(ListMode);

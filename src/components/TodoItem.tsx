@@ -24,7 +24,7 @@ const ListItem = styled.li`
     margin-bottom: 8px;
     padding: 0;
     background: white;
-    width: 92%;
+    width: 96%;
 `;
 
 const Checkbox = styled.input`
@@ -90,7 +90,9 @@ const TodoTextWrapper = styled.div`
 `;
 
 
-const Delete = styled(Button)``;
+const Delete = styled(Button)`
+    font-weight: bold;
+`;
 
 
 export default function TodoItem (props: {
@@ -126,7 +128,7 @@ export default function TodoItem (props: {
                             {item.data}
                         </TodoText>
                     </TodoTextWrapper>
-                        <Delete onClick={() => props.deleteTodo(item.id)}>X</Delete>
+                        <Delete onClick={() => props.deleteTodo(item.id)}>✖</Delete>
                 </ListItem>
             )}
         </Draggable>
