@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import {Draggable} from "react-beautiful-dnd";
+import { Draggable } from "react-beautiful-dnd";
 import { Todo } from '../types'
 
 const Button = styled.button`
-    font-size: 18px;
+    font-size: 19px;
     font-family: 'Cousine', monospace;
     background: none;
     color: #FD3F49;
@@ -23,8 +23,8 @@ const ListItem = styled.li`
     justify-content: space-between;
     margin-bottom: 8px;
     padding: 0;
-    background: white;
-    width: 96%;
+    width: 100%;    
+    border-radius: 4px;   
 `;
 
 const Checkbox = styled.input`
@@ -60,10 +60,10 @@ const Checkmark = styled.span`
     left: 0;
     height: 25px;
     width: 25px;
-    background: #FFFFFF;
     border: 1px solid #13988F;
     box-sizing: border-box;
     border-radius: 5px;
+    background: rgba(255,255,255,0.53);
     
     &:after{
         left: 8px;
@@ -87,6 +87,7 @@ const TodoTextWrapper = styled.div`
     display: flex;
     align-items: center;
     width: 90%;    
+    word-break: break-word;
 `;
 
 
@@ -95,7 +96,7 @@ const Delete = styled(Button)`
 `;
 
 
-export default function TodoItem (props: {
+export function TodoItem (props: {
     addNewTodo: (text: string) => void,
     deleteTodo: (id: number) => void,
     onCheckboxChange: (id: number) => (event: React.ChangeEvent<HTMLInputElement>) => void,
@@ -125,7 +126,7 @@ export default function TodoItem (props: {
                         <TodoText style={item.checked ? {textDecoration: "line-through", textDecorationThickness: "2px"} : {}}
                                   onClick={() => props.onClickTodoText(item.id)}
                         >
-                            {item.data}
+                                {item.data}
                         </TodoText>
                     </TodoTextWrapper>
                         <Delete onClick={() => props.deleteTodo(item.id)}>✖</Delete>

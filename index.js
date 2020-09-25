@@ -5,7 +5,7 @@ const sqlite = require('sqlite3').verbose();
 const bcrypt = require('bcryptjs');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const SQLiteStore = require('connect-sqlite3')(session);
+const SQLiteStore = require('./sqlite-session-store')(session);
 
 const app = express();
 const db = new sqlite.Database('todos.sqlite');
@@ -20,8 +20,7 @@ app.use(cors({origin: 'http://localhost:3000', credentials: true}));
 app.use(cookieParser());
 app.use(session({
     store: new SQLiteStore({
-        db: 'todos.sqlite',
-        dir: '.',
+        db: db,
         table: 'sessions'
     }),
     secret: 'hungary cat',

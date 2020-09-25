@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
     Switch,
     Route,
@@ -7,7 +7,7 @@ import {
 import SingleTaskMode from './components/SingleTaskMode';
 import ListMode from "./components/ListMode";
 import AuthForm from "./components/AuthForm";
-import {prefix} from "./prefix";
+import { prefix } from "./prefix";
 import { loadTodos } from "./redux/actions";
 import { connect } from "react-redux";
 
@@ -23,6 +23,8 @@ function App(props: { loadTodos: () => void }) {
                         history.replace('list');
                     }
                     loadTodos();
+                } else {
+                    history.replace('/');
                 }
             })
     }, []);

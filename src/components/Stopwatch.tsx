@@ -3,9 +3,9 @@ import styled from 'styled-components';
 
 const WrapperTimer = styled.div`
     display: flex;
-    flex-direction: row; 
+    flex-direction: column; 
     justify-content: space-between;
-    align-items: center;
+    align-items: stretch;
     margin-bottom: 30px;
     margin-top: 40px;
     height: 26px;
@@ -30,22 +30,30 @@ const Button = styled.button`
     height: 40px;
     cursor:pointer;
     border: none;
+    padding: 0;
 `;
 
 const StartButton = styled(Button)`
-    width: 100px;  
+    color: #33CEC3;
+    background: none;
+    border: none;
+    font-size: 22px;
+
+`;
+
+const ResetButton = styled(Button)`
     color: #33CEC3;
     background: none;
     border: none;
     font-size: 22px;
 `;
 
-const ResetButton = styled(Button)`
-    width: 100px;  
-    color: #07635C;
-    background: none;
-    border: none;
+const ButtonWrapper = styled.div`
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 `;
+
 
 
 function useInterval(callback: () => void, delay: number | null) {
@@ -102,8 +110,10 @@ export default function StopWatch() {
              <Timer>
                 <Counter />
              </Timer>
-             <StartButton onClick={() => setIsRunning(!isRunning)}> {isRunning ? '⏸' : '►'} </StartButton>
-             <ResetButton onClick={() => {setIsRunning(false); setSec(0)}}> Сброс </ResetButton>
+             <ButtonWrapper>
+                 <StartButton onClick={() => setIsRunning(!isRunning)}> {isRunning ? '⏸' : '►'} </StartButton>
+                 <ResetButton onClick={() => {setIsRunning(false); setSec(0)}}> ⭯ </ResetButton>
+             </ButtonWrapper>
          </WrapperTimer>
      )
 

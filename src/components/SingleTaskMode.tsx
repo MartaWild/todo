@@ -5,7 +5,8 @@ import { Todo } from '../types';
 import Stopwatch from "./Stopwatch";
 import { prefix } from "../prefix";
 import { connect } from "react-redux";
-import {addTodo, deleteTodo, loadTodos, setTodos} from "../redux/actions";
+import { setTodos} from "../redux/actions";
+import { GlobalStyle } from "./GlobalStyle";
 
 const Button = styled.button`
     font-size: 18px;
@@ -13,10 +14,9 @@ const Button = styled.button`
     color: #ffffff;
     background: #33CEC3;
     border-radius: 4px;
-    height: 40px;
     cursor:pointer;
     border: none;
-    padding: 5px 20px 5px 20px;
+    padding: 0 3% 0 3%;
 `;
 
 const Wrapper = styled.div`
@@ -32,14 +32,26 @@ const Wrapper = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    
+    @media only screen and (max-width: 780px){    
+      width: 80vw; 
+    }
 `;
 
 const WrapperTodo = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 35px;
-    min-height: 250px;
+    margin-bottom: 2%;
+    min-height: 260px;
+    background: rgba(210, 250, 247, 0.7);
+    width: 100%;
+    border-radius: 26px;
+    
+    @media only screen and (max-width: 1024px){    
+      min-height: 230px;
+    }
+  
 `;
 
 const TodoText = styled.li`
@@ -57,38 +69,42 @@ const WrapperButtons = styled.div`
     width: 100%;
 `;
 
-const CompleteButton = styled(Button)`
-    `;
+const CompleteButton = styled(Button)``;
 
 const NextButton = styled(Button)`
-    width: 100px;
-    font-size: 25px;
+    font-size: 40px;
     color: #33CEC3;
     background: none;
     border: none;
+    align-items: center;
+    padding: 0;
 `;
 
 const ListModeButton = styled(Button)` 
     align-self: flex-start;  
-    font-size: 18px; 
+    font-size: 15px; 
     background: none;
     border: none;
     color: #07635C;
-    padding: 0;
+    padding: 0;    
+    margin-top: 13vh;
+    
+    @media only screen and (max-height: 670px){    
+      margin-top: 5vh;
+    }
+
 `;
 
 const PreviousButton = styled(Button)`
-    width: 100px;    
-    font-size: 25px;
+    font-size: 40px;
     color: #33CEC3;
     background: none;
     border: none;
+    align-items: center;
+    padding: 0;
 `;
 
-const StopwatchWrapper = styled.div`
-    width: 50%;
-    align-self: flex-start;
-`;
+const StopwatchWrapper = styled.div``;
 
 const Line = styled.hr`
     border: 1px solid #33CEC3;
@@ -154,13 +170,14 @@ function SingleTaskMode(props: {
 
     return (
         <Wrapper>
+            <GlobalStyle />
             <WrapperTodo>
                 <TodoText>{incompleteTodos.length > 0 ? incompleteTodos[newIndex].data : "Нет заданий"}</TodoText>
             </WrapperTodo>
             <Line />
             <WrapperButtons>
                 <PreviousButton onClick={previousTodo}> 🠜 </PreviousButton>
-                <CompleteButton onClick={handleCompleteButton}> Выполненно! </CompleteButton>
+                <CompleteButton onClick={handleCompleteButton}> Выполнено! </CompleteButton>
                 <NextButton onClick={nextTodo}> 🠞 </NextButton>
             </WrapperButtons>
             <StopwatchWrapper>

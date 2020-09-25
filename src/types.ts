@@ -3,5 +3,6 @@ export type Todo = {
     checked: boolean,
     id: number,
     order: number
+    /*time: number*/
 }
 
