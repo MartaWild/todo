@@ -10,7 +10,6 @@ const SQLiteStore = require('./sqlite-session-store')(session);
 const app = express();
 const db = new sqlite.Database('todos.sqlite');
 
-//выполняется до других действий c db
 db.serialize(() => {
     db.run('CREATE TABLE IF NOT EXISTS todos (id INTEGER PRIMARY KEY, checked BOOLEAN, data TEXT, item_order INTEGER, user_id INTEGER)');
     db.run('CREATE TABLE IF NOT EXISTS users (id_user INTEGER PRIMARY KEY, login TEXT, password_hash TEXT)');
@@ -228,5 +227,10 @@ app.put('/api/v1/logout/', (req, res) => {
     req.session.destroy();
     res.sendStatus(200);
 });
+
+app.get('*', (req, res)=>{
+    res.sendFile(path.join(__dirname, './build', 'index.html'))
+});
+
 
 app.listen(process.env.PORT || 4000, () => console.log('Done!'));
