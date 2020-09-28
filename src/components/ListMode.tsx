@@ -69,7 +69,7 @@ const InputTodo = styled.input`
     color: #07635C;
     box-sizing: border-box;
     border-radius: 5px;
-    border:  none/*1px solid #13988F*/;
+    border:  none;
     padding: 1%;
     margin-bottom: 1%;
     background: rgba(255, 255, 255, 0.8);
@@ -159,7 +159,7 @@ const reorder = (list: Todo[], startIndex: number, endIndex: number) => {
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
     return result.map((el, index) => {
-        return {data: el.data, checked: el.checked, id: el.id, order: index}
+        return { data: el.data, checked: el.checked, id: el.id, order: index, time: el.time }
     });
 };
 
@@ -191,7 +191,7 @@ function ListMode(props: {
     resetStore: () => void,
     isLoading: boolean
 }) {
-    const {todos, setTodos, addTodo, deleteTodo, resetStore, isLoading} = props;
+    const { todos, setTodos, addTodo, deleteTodo, resetStore, isLoading } = props;
 
     const addNewTodo = (text: string) => {
         let order = 0;
@@ -208,10 +208,10 @@ function ListMode(props: {
                     fetch(prefix + '/api/v1/todos/' + todoId, {
                         method: 'PUT',
                         headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({data: i.data, checked: !i.checked, id: i.id, order: i.order}),
+                        body: JSON.stringify({data: i.data, checked: !i.checked, id: i.id, order: i.order, time: i.time}),
                         credentials: 'include'
                     });
-                    return {data: i.data, checked: event.target.checked, id: i.id, order: i.order};
+                    return {data: i.data, checked: event.target.checked, id: i.id, order: i.order, time: i.time};
                 } else {
                     return i;
                 }
@@ -224,10 +224,10 @@ function ListMode(props: {
                 fetch(prefix + '/api/v1/todos/' + todoId, {
                     method: 'PUT',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({data: i.data, checked: !i.checked, id: i.id, order: i.order}),
+                    body: JSON.stringify({data: i.data, checked: !i.checked, id: i.id, order: i.order, time: i.time}),
                     credentials: 'include'
                 });
-                return {data: i.data, checked: !i.checked, id: i.id, order: i.order};
+                return {data: i.data, checked: !i.checked, id: i.id, order: i.order, time: i.time};
             } else {
                 return i;
             }
@@ -267,7 +267,8 @@ function ListMode(props: {
                 body: JSON.stringify({
                     data: items[i].data,
                     checked: items[i].checked, id: items[i].id,
-                    order: items[i].order
+                    order: items[i].order,
+                    time: items[i].time
                 }),
                 credentials: 'include'
             });

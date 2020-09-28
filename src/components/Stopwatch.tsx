@@ -1,5 +1,8 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import { connect } from "react-redux";
+import { setTime } from "../redux/actions";
+import {Todo} from "../types";
 
 const WrapperTimer = styled.div`
     display: flex;
@@ -82,11 +85,15 @@ function useInterval(callback: () => void, delay: number | null) {
 }
 
 
-
-export default function StopWatch() {
-    const [sec, setSec] = useState(0);
+function StopWatch(props: {
+    id: number,
+    setTime: (time: number, index: number) => void,
+    todos: Todo[]
+}) {
     const [isRunning, setIsRunning] = useState(false);
     const [delay, setDelay] = useState(1000);
+    const { todos, setTime, id } = props;
+    const sec = todos.find(todo => todo.id === id)!.time;
 
     const formatTime = (totalSeconds: number) =>{
         let hours = Math.floor(totalSeconds / 3600);
@@ -98,9 +105,9 @@ export default function StopWatch() {
 
     function Counter() {
         useInterval(() => {
-            setSec(sec + 1);
+            setTime(sec + 1, id);
+            localStorage.setItem(id.toString(), (sec+1).toString());
         }, isRunning ? delay : null);
-
 
         return <p>{formatTime(sec)}</p>;
     }
@@ -112,9 +119,14 @@ export default function StopWatch() {
              </Timer>
              <ButtonWrapper>
                  <StartButton onClick={() => setIsRunning(!isRunning)}> {isRunning ? '⏸' : '►'} </StartButton>
-                 <ResetButton onClick={() => {setIsRunning(false); setSec(0)}}> ⭯ </ResetButton>
+                 <ResetButton onClick={() => {setIsRunning(false); setTime(0, id)}}> ⭯ </ResetButton>
              </ButtonWrapper>
          </WrapperTimer>
      )
 
 }
+
+export default connect(
+    (state: any) => ({ todos: state.todos }),
+    { setTime }
+)(StopWatch);

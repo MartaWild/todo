@@ -126,9 +126,9 @@ function SingleTaskMode(props: {
                     fetch(prefix + '/api/v1/todos/' + todoId, {
                         method: 'PUT',
                         headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({data: i.data, checked: true, id: i.id, order: i.order})
+                        body: JSON.stringify({data: i.data, checked: true, id: i.id, order: i.order, time: i.time})
                     });
-                    return {data: i.data, checked: true, id: i.id, order: i.order};
+                    return {data: i.data, checked: true, id: i.id, order: i.order, time: i.time};
                 } else {
                     return i;
                 }
@@ -168,22 +168,32 @@ function SingleTaskMode(props: {
         }
     };
 
+    if (incompleteTodos.length > 0){
+        return (
+            <Wrapper>
+                <GlobalStyle />
+                <WrapperTodo>
+                    <TodoText>{incompleteTodos.length > 0 ? incompleteTodos[newIndex].data : "Нет заданий"}</TodoText>
+                </WrapperTodo>
+                <Line />
+                <WrapperButtons>
+                    <PreviousButton onClick={previousTodo}> 🠜 </PreviousButton>
+                    <CompleteButton onClick={handleCompleteButton}> Выполнено! </CompleteButton>
+                    <NextButton onClick={nextTodo}> 🠞 </NextButton>
+                </WrapperButtons>
+                <StopwatchWrapper>
+                    <Stopwatch id={todos[newIndex].id}/>
+                </StopwatchWrapper>
+                <ListModeButton onClick={handler}>К списку</ListModeButton>
+            </Wrapper>
+        )
+    }
     return (
         <Wrapper>
             <GlobalStyle />
             <WrapperTodo>
                 <TodoText>{incompleteTodos.length > 0 ? incompleteTodos[newIndex].data : "Нет заданий"}</TodoText>
             </WrapperTodo>
-            <Line />
-            <WrapperButtons>
-                <PreviousButton onClick={previousTodo}> 🠜 </PreviousButton>
-                <CompleteButton onClick={handleCompleteButton}> Выполнено! </CompleteButton>
-                <NextButton onClick={nextTodo}> 🠞 </NextButton>
-            </WrapperButtons>
-            <StopwatchWrapper>
-                <Stopwatch />
-            </StopwatchWrapper>
-            <ListModeButton onClick={handler}>К списку</ListModeButton>
         </Wrapper>
     )
 }
