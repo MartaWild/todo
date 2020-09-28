@@ -12,7 +12,7 @@ const db = new sqlite.Database('todos.sqlite');
 
 //выполняется до других действий c db
 db.serialize(() => {
-    db.run('CREATE TABLE IF NOT EXISTS todos (id INTEGER PRIMARY KEY, checked BOOLEAN, data TEXT, item_order INTEGER)');
+    db.run('CREATE TABLE IF NOT EXISTS todos (id INTEGER PRIMARY KEY, checked BOOLEAN, data TEXT, item_order INTEGER, user_id INTEGER)');
     db.run('CREATE TABLE IF NOT EXISTS users (id_user INTEGER PRIMARY KEY, login TEXT, password_hash TEXT)');
 });
 
