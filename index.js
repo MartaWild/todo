@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const SQLiteStore = require('./sqlite-session-store')(session);
+const path = require('path');
 
 const app = express();
 const db = new sqlite.Database('todos.sqlite');
@@ -228,7 +229,7 @@ app.put('/api/v1/logout/', (req, res) => {
     res.sendStatus(200);
 });
 
-app.get('*', (req, res)=>{
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, './build', 'index.html'))
 });
 
