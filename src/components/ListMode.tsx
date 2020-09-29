@@ -28,7 +28,7 @@ const Wrapper = styled.div`
     }
     
     @media only screen and (max-width: 780px){    
-      width: 80vw;
+      width: 88vw;
     }
 `;
 
