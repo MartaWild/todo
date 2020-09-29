@@ -194,6 +194,7 @@ function SingleTaskMode(props: {
             <WrapperTodo>
                 <TodoText>{incompleteTodos.length > 0 ? incompleteTodos[newIndex].data : "Нет заданий"}</TodoText>
             </WrapperTodo>
+            <ListModeButton onClick={handler}>К списку</ListModeButton>
         </Wrapper>
     )
 }
