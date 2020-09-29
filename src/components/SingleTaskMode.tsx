@@ -7,6 +7,7 @@ import { prefix } from "../prefix";
 import { connect } from "react-redux";
 import { setTodos} from "../redux/actions";
 import { GlobalStyle } from "./GlobalStyle";
+import Arrow from '../arrow.svg'
 
 const Button = styled.button`
     font-size: 18px;
@@ -16,7 +17,7 @@ const Button = styled.button`
     border-radius: 4px;
     cursor:pointer;
     border: none;
-    padding: 0 3% 0 3%;
+    padding: 1% 3% 1% 3%;
 `;
 
 const Wrapper = styled.div`
@@ -71,14 +72,7 @@ const WrapperButtons = styled.div`
 
 const CompleteButton = styled(Button)``;
 
-const NextButton = styled(Button)`
-    font-size: 40px;
-    color: #33CEC3;
-    background: none;
-    border: none;
-    align-items: center;
-    padding: 0;
-`;
+
 
 const ListModeButton = styled(Button)` 
     align-self: flex-start;  
@@ -94,14 +88,18 @@ const ListModeButton = styled(Button)`
     }
 
 `;
-
-const PreviousButton = styled(Button)`
-    font-size: 40px;
-    color: #33CEC3;
-    background: none;
-    border: none;
+const NextButton = styled.img`
+    width: 30px;
     align-items: center;
     padding: 0;
+`;
+
+const PreviousButton = styled.img`
+    width: 30px;
+    align-items: center;
+    padding: 0;
+    transform: scale(-1,1);
+
 `;
 
 const StopwatchWrapper = styled.div``;
@@ -177,9 +175,9 @@ function SingleTaskMode(props: {
                 </WrapperTodo>
                 <Line />
                 <WrapperButtons>
-                    <PreviousButton onClick={previousTodo}> 🠜 </PreviousButton>
+                    <PreviousButton src={Arrow} onClick={previousTodo} />
                     <CompleteButton onClick={handleCompleteButton}> Выполнено! </CompleteButton>
-                    <NextButton onClick={nextTodo}> 🠞 </NextButton>
+                    <NextButton src={Arrow} onClick={nextTodo} />
                 </WrapperButtons>
                 <StopwatchWrapper>
                     <Stopwatch id={todos[newIndex].id}/>

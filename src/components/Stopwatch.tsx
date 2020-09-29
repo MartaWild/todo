@@ -2,7 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { connect } from "react-redux";
 import { setTime } from "../redux/actions";
-import {Todo} from "../types";
+import { Todo } from "../types";
+import Start from '../start.svg';
+import Pause from '../pause.svg';
+import Reset from '../reset.svg'
+
 
 const WrapperTimer = styled.div`
     display: flex;
@@ -36,19 +40,12 @@ const Button = styled.button`
     padding: 0;
 `;
 
-const StartButton = styled(Button)`
-    color: #33CEC3;
-    background: none;
-    border: none;
-    font-size: 22px;
-
+const StartButton = styled.img`
+    width: 19px;
 `;
 
-const ResetButton = styled(Button)`
-    color: #33CEC3;
-    background: none;
-    border: none;
-    font-size: 22px;
+const ResetButton = styled.img`
+    width: 19px;
 `;
 
 const ButtonWrapper = styled.div`
@@ -118,8 +115,8 @@ function StopWatch(props: {
                 <Counter />
              </Timer>
              <ButtonWrapper>
-                 <StartButton onClick={() => setIsRunning(!isRunning)}> {isRunning ? '⏸' : '►'} </StartButton>
-                 <ResetButton onClick={() => {setIsRunning(false); setTime(0, id)}}> ⭯ </ResetButton>
+                 <StartButton src={isRunning ? Pause : Start} onClick={() => setIsRunning(!isRunning)} />
+                 <ResetButton src={Reset} onClick={() => {setIsRunning(false); setTime(0, id)}} />
              </ButtonWrapper>
          </WrapperTimer>
      )

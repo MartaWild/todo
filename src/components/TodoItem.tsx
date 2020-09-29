@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { Draggable } from "react-beautiful-dnd";
 import { Todo } from '../types'
+import Cross from '../cross.svg';
+import Background from "../bg32.jpg";
 
 const Button = styled.button`
     font-size: 19px;
@@ -90,11 +92,10 @@ const TodoTextWrapper = styled.div`
     word-break: break-word;
 `;
 
-
-const Delete = styled(Button)`
-    font-weight: bold;
+const Delete = styled.img`
+   width: 17px;
+   align-items: center;
 `;
-
 
 export function TodoItem (props: {
     addNewTodo: (text: string) => void,
@@ -129,7 +130,7 @@ export function TodoItem (props: {
                                 {item.data}
                         </TodoText>
                     </TodoTextWrapper>
-                        <Delete onClick={() => props.deleteTodo(item.id)}>✖</Delete>
+                        <Delete src={Cross} onClick={() => props.deleteTodo(item.id)} />
                 </ListItem>
             )}
         </Draggable>
