@@ -131,10 +131,12 @@ const LogOutButton = styled(Button)`
     
     @media only screen and (max-width: 1024px){
       font-size: 14px;
+      margin: 5% 1% 3% 0;
     }
     
     @media only screen and (max-width: 780px){    
       font-size: 12px;
+      margin: 5% 1% 3% 0;
     }
 `;
 
