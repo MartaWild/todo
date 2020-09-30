@@ -122,8 +122,13 @@ export function Registration(){
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({login, password}),
                 credentials: 'include'
-            });
-            history.replace('list');
+            }).then((res) => {
+                if (res.ok) {
+                    history.replace('list');
+                } else {
+                    alert('Что-то пошло не так!')
+                }
+            })
         } else {
             alert('Пароли не совпадают!')
         }
