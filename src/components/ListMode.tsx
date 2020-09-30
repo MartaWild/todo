@@ -20,7 +20,8 @@ const Wrapper = styled.div`
     color: #07635C;
     background: rgba(210, 250, 247, 0.7);
     border-radius: 26px;
-    padding: 3%;
+    padding: 3%;    
+    box-sizing: border-box;
     
     @media only screen and (max-width: 1024px){    
       font-size: 18px;
@@ -28,7 +29,13 @@ const Wrapper = styled.div`
     }
     
     @media only screen and (max-width: 780px){    
-      width: 95vw;
+      width: 80vw;
+    }
+    
+    @media only screen and (max-width: 450px){    
+      width: 100vw; 
+      margin-top: 0;
+      border-radius: 0 0 26px 26px;
     }
 `;
 
@@ -53,6 +60,11 @@ const Button = styled.button`
 
 const List = styled.ul`
     padding: 0;
+    
+    @media only screen and (max-width: 450px){    
+      margin-top: 10%;
+    }
+    
 `;
 
 const WrapperAddTodo = styled.div`
@@ -84,6 +96,12 @@ const InputTodo = styled.input`
       margin-bottom: 3%;
     }
     
+    @media only screen and (max-width: 450px){    
+      width: 100%;
+      margin-bottom: 3%;
+      padding: 4%;
+    }
+    
     &:focus {
       outline: none;
     }
@@ -97,7 +115,14 @@ const AddTodo = styled(Button)`
     }
 `;
 
-const SingleTaskModeButton = styled(Button)``;
+const SingleTaskModeButton = styled(Button)`
+    color: #07635C;
+    background: none;
+    border-radius: 4px;
+    cursor:pointer;
+    border: 1px #07635C solid;
+    padding: 1% 2% 1% 2%;
+`;
 
 const TodayDate = styled.div`
     margin: 5% 0 3% 0;
@@ -312,7 +337,7 @@ function ListMode(props: {
                     addNewTodo(inputValue);
                     setValue('')
                 }}>Добавить</AddTodo>
-                <SingleTaskModeButton onClick={handler}>Одно задание</SingleTaskModeButton>
+                <SingleTaskModeButton onClick={handler}> Одно задание </SingleTaskModeButton>
             </WrapperAddTodo>
             {isLoading ? <Loader/> :
                 <DragDropContext onDragEnd={onDragEnd}>

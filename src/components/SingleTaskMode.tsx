@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components'
-import { useHistory } from "react-router-dom";
-import { Todo } from '../types';
+import {useHistory} from "react-router-dom";
+import {Todo} from '../types';
 import Stopwatch from "./Stopwatch";
-import { prefix } from "../prefix";
-import { connect } from "react-redux";
-import { setTodos} from "../redux/actions";
-import { GlobalStyle } from "./GlobalStyle";
+import {prefix} from "../prefix";
+import {connect} from "react-redux";
+import {setTodos} from "../redux/actions";
+import {GlobalStyle} from "./GlobalStyle";
 import Arrow from '../arrow.svg'
 
 const Button = styled.button`
@@ -17,7 +17,13 @@ const Button = styled.button`
     border-radius: 4px;
     cursor:pointer;
     border: none;
-    padding: 1% 3% 1% 3%;
+    padding: 0.5em 1em 0.5em 1em;  
+    
+    @media only screen and (max-width: 450px){    
+      padding: 1em 1em 1em 1em; 
+    }
+    
+  
 `;
 
 const Wrapper = styled.div`
@@ -33,11 +39,38 @@ const Wrapper = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    box-sizing: border-box;
     
     @media only screen and (max-width: 780px){    
       width: 80vw; 
     }
+    
+    @media only screen and (max-width: 450px){    
+      width: 100vw; 
+      margin-top: 0;
+    }
+    
+    
 `;
+const WindowWrapper = styled.div`
+    margin-left: auto;
+    margin-right: auto;    
+    padding: 0;
+    width: 100%;   
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    @media only screen and (max-width: 450px){    
+      background: rgba(210, 250, 247, 0.7);
+      border-radius: 0 0 26px 26px;
+      padding: 5%;
+      box-sizing: border-box;            
+    }
+
+`;
+
 
 const WrapperTodo = styled.div`
     display: flex;
@@ -51,6 +84,11 @@ const WrapperTodo = styled.div`
     
     @media only screen and (max-width: 1024px){    
       min-height: 230px;
+    }
+    
+    @media only screen and (max-width: 450px){    
+      background: none; 
+      
     }
   
 `;
@@ -72,8 +110,6 @@ const WrapperButtons = styled.div`
 
 const CompleteButton = styled(Button)``;
 
-
-
 const ListModeButton = styled(Button)` 
     align-self: flex-start;  
     font-size: 15px; 
@@ -83,8 +119,13 @@ const ListModeButton = styled(Button)`
     padding: 0;    
     margin-top: 13vh;
     
-    @media only screen and (max-height: 670px){    
-      margin-top: 5vh;
+    @media only screen and (max-height: 670px){
+        margin-top: 5vh;
+    }
+    
+    @media only screen and (max-width: 450px){    
+        margin-top: 5vh;  
+        margin-left: 5vw;   
     }
 
 `;
@@ -114,9 +155,9 @@ const Line = styled.hr`
 function SingleTaskMode(props: {
     todos: Todo[],
     setTodos: (todos: Todo[]) => void,
-}){
+}) {
     const [index, setindex] = useState(0);
-    const {todos, setTodos } = props;
+    const {todos, setTodos} = props;
 
     const setDone = (todoId: number) => {
         setTodos(todos.map(i => {
@@ -139,56 +180,58 @@ function SingleTaskMode(props: {
         history.replace('list')
     };
 
-    const getIncompleteTodos = () =>{
+    const getIncompleteTodos = () => {
         return todos.filter(todo => !todo.checked);
     };
 
     const incompleteTodos = getIncompleteTodos();
 
     const nextTodo = () => {
-        if (newIndex+1 < incompleteTodos.length){
-            setindex(newIndex+1);
+        if (newIndex + 1 < incompleteTodos.length) {
+            setindex(newIndex + 1);
         }
     };
 
     const previousTodo = () => {
-        if (newIndex-1 >= 0){
-            setindex(newIndex-1);
+        if (newIndex - 1 >= 0) {
+            setindex(newIndex - 1);
         }
     };
 
-    const newIndex = Math.min(incompleteTodos.length-1, index);
+    const newIndex = Math.min(incompleteTodos.length - 1, index);
 
     const handleCompleteButton = () => {
-        if (incompleteTodos.length > 0){
+        if (incompleteTodos.length > 0) {
             setDone(incompleteTodos[newIndex].id);
             nextTodo();
         }
     };
 
-    if (incompleteTodos.length > 0){
+    if (incompleteTodos.length > 0) {
         return (
             <Wrapper>
-                <GlobalStyle />
-                <WrapperTodo>
-                    <TodoText>{incompleteTodos.length > 0 ? incompleteTodos[newIndex].data : "Нет заданий"}</TodoText>
-                </WrapperTodo>
-                <Line />
-                <WrapperButtons>
-                    <PreviousButton src={Arrow} onClick={previousTodo} />
-                    <CompleteButton onClick={handleCompleteButton}> Выполнено! </CompleteButton>
-                    <NextButton src={Arrow} onClick={nextTodo} />
-                </WrapperButtons>
-                <StopwatchWrapper>
-                    <Stopwatch id={todos[newIndex].id}/>
-                </StopwatchWrapper>
+                <WindowWrapper>
+                    <GlobalStyle/>
+                    <WrapperTodo>
+                        <TodoText>{incompleteTodos.length > 0 ? incompleteTodos[newIndex].data : "Нет заданий"}</TodoText>
+                    </WrapperTodo>
+                    <Line/>
+                    <WrapperButtons>
+                        <PreviousButton src={Arrow} onClick={previousTodo}/>
+                        <CompleteButton onClick={handleCompleteButton}> Выполнено! </CompleteButton>
+                        <NextButton src={Arrow} onClick={nextTodo}/>
+                    </WrapperButtons>
+                    <StopwatchWrapper>
+                        <Stopwatch id={todos[newIndex].id}/>
+                    </StopwatchWrapper>
+                </WindowWrapper>
                 <ListModeButton onClick={handler}>К списку</ListModeButton>
             </Wrapper>
         )
     }
     return (
         <Wrapper>
-            <GlobalStyle />
+            <GlobalStyle/>
             <WrapperTodo>
                 <TodoText>{incompleteTodos.length > 0 ? incompleteTodos[newIndex].data : "Нет заданий"}</TodoText>
             </WrapperTodo>
@@ -198,6 +241,6 @@ function SingleTaskMode(props: {
 }
 
 export default connect(
-    (state: any) => ({ todos: state.todos }),
-    { setTodos }
+    (state: any) => ({todos: state.todos}),
+    {setTodos}
 )(SingleTaskMode);

@@ -3,20 +3,6 @@ import styled from 'styled-components';
 import { Draggable } from "react-beautiful-dnd";
 import { Todo } from '../types'
 import Cross from '../cross.svg';
-import Background from "../bg32.jpg";
-
-const Button = styled.button`
-    font-size: 19px;
-    font-family: 'Cousine', monospace;
-    background: none;
-    color: #FD3F49;
-    border-radius: 4px;
-    height: 40px;
-    cursor:pointer;
-    border: none;
-    font-weight: bold;
-
-`;
 
 const ListItem = styled.li`
     list-style-type: none;
@@ -27,6 +13,10 @@ const ListItem = styled.li`
     padding: 0;
     width: 100%;    
     border-radius: 4px;   
+    
+    @media only screen and (max-width: 780px){    
+      margin-bottom: 9%;
+    }
 `;
 
 const Checkbox = styled.input`

@@ -26,6 +26,7 @@ const Timer = styled.div`
     flex-direction: column;
     justify-content: center;
     font-size: 19px;    
+    margin-bottom: 10%;
 `;
 
 const Button = styled.button`

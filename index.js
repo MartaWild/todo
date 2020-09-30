@@ -16,7 +16,7 @@ db.serialize(() => {
     db.run('CREATE TABLE IF NOT EXISTS users (id_user INTEGER PRIMARY KEY, login TEXT, password_hash TEXT)');
 });
 
-app.use(cors({origin: 'http://localhost:3000', credentials: true}));
+app.use(cors({origin: (origin, callback) => { callback(null, true) }, credentials: true}));
 app.use(cookieParser());
 app.use(session({
     store: new SQLiteStore({
