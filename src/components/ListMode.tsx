@@ -74,7 +74,7 @@ const WrapperAddTodo = styled.div`
 
 
 const InputTodo = styled.input`
-    width: 60%;
+    width: 50%;
     font-size: 19px;
     font-family: 'Cousine', monospace;
     margin-right: 10px;
@@ -85,10 +85,9 @@ const InputTodo = styled.input`
     padding: 1%;
     margin-bottom: 1%;
     background: rgba(255, 255, 255, 0.8);
-
         
     @media only screen and (max-width: 1024px){    
-      width: 43%;   
+      width: 40%;   
     }    
     
     @media only screen and (max-width: 780px){    
