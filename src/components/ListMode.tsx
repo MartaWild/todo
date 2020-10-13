@@ -336,7 +336,7 @@ function ListMode(props: {
                     addNewTodo(inputValue);
                     setValue('')
                 }}>Добавить</AddTodo>
-                <SingleTaskModeButton onClick={handler}> Одно задание </SingleTaskModeButton>
+                <SingleTaskModeButton onClick={handler}> Режим фокуса </SingleTaskModeButton>
             </WrapperAddTodo>
             {isLoading ? <Loader/> :
                 <DragDropContext onDragEnd={onDragEnd}>
